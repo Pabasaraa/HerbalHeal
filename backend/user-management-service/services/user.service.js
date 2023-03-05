@@ -19,6 +19,14 @@ async function getUserById(id) {
   }
 }
 
+async function getUserByUsername(username) {
+  try {
+    return await userModel.findOne({ username: username });
+  } catch (error) {
+    throw new Error("Error while getting user by username: " + error);
+  }
+}
+
 async function checkExistence(email, username) {
   try {
     return await userModel.findOne({
@@ -48,6 +56,7 @@ async function deleteUser(id) {
 export default {
   createUser,
   getUserById,
+  getUserByUsername,
   checkExistence,
   updateUser,
   deleteUser,

@@ -1,5 +1,9 @@
+import argon2 from "argon2";
+import jwt from "jsonwebtoken";
+
 import userService from "../services/user.service.js";
 import userValidation from "../services/validation.service.js";
+import jwtValidate from "../services/authorization.service.js";
 
 const createUser = async (req, res) => {
   const user = new userValidation(req.body);
@@ -29,6 +33,48 @@ const createUser = async (req, res) => {
   }
 };
 
+const userLogin = async (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  try {
+    const user = await userService.getUserByUsername(username);
+
+    if (!user) {
+      throw new Error("User does not exist!");
+    }
+
+    const validPassword = await argon2.verify(user.password, password);
+
+    if (!validPassword) {
+      throw new Error("Invalid password!");
+    }
+
+    const token = jwt.sign(
+      { _id: user._id, username: user.username },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: 86400,
+      }
+    );
+
+    res.status(200).json({
+      status: "success",
+      message: "Login successful!",
+      data: {
+        id: user._id,
+        username: user.username,
+        token: token,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
 const getUserById = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
@@ -38,7 +84,26 @@ const getUserById = async (req, res) => {
   }
 };
 
+const validateToken = async (req, res) => {
+  try {
+    // Had to pass req, res and next to jwtValidate function to make it work
+    // Because jwtValidate function is out of the scope of the route handler
+    jwtValidate(req, res, () => {});
+    res.status(200).json({
+      status: "success",
+      message: `Token is valid! ${req.user.username}`,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
 export default {
   createUser,
+  userLogin,
   getUserById,
+  validateToken,
 };
