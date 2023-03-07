@@ -92,6 +92,7 @@ const validateToken = async (req, res) => {
     res.status(200).json({
       status: "success",
       message: `Token is valid! ${req.user.username}`,
+      data: req.user,
     });
   } catch (error) {
     res.status(400).json({

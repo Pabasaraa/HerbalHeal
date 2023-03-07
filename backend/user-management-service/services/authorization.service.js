@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const jwtValidate = (req, res, next) => {
   const token = req.headers["x-access-token"];
-  // For API testing use below line of code comment out above line
+  // For API testing use below line of code, comment out above line
   // const token = req.body.token;
 
   if (!token) {
@@ -14,9 +14,7 @@ const jwtValidate = (req, res, next) => {
       console.log(`User ${decoded.username} is authorized!`);
       next();
     } catch (error) {
-      res
-        .status(500)
-        .json("Failed to authenticate token. Error: " + error.message);
+      throw new Error("Failed to authenticate token. Error: " + error.message);
     }
   }
 };
