@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 // Import routes
 import userRoutes from "./user-management-service/routes/user.route.js";
 import paymentRoutes from "./payment-management-service/routes/payment.route.js";
+import itemRoutes from "./item-management-service/routes/item.route.js";
 
 // Load environment variables from .env file to the process.env object
 dotenv.config();
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 // Use routes
 app.use("/user", userRoutes);
 app.use("/payment", paymentRoutes);
+app.use("/item", itemRoutes);
 
 // Connect to the database
 connectDB();
