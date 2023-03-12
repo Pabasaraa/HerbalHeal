@@ -1,3 +1,4 @@
+import axios from "axios";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 
@@ -84,6 +85,40 @@ const getUserById = async (req, res) => {
   }
 };
 
+const deleteUserById = async (req, res) => {
+  try {
+    if (!req.body.token) {
+      throw new Error("No token provided!");
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/user/validatetoken",
+        {},
+        {
+          headers: {
+            "x-access-token": req.body.token,
+          },
+        }
+      );
+      req.body.userId = response.data.data._id;
+    } catch (error) {
+      throw new Error("Error while getting the user ID: " + error);
+    }
+    await userService.deleteUser(req.body.userId);
+
+    res.status(200).json({
+      status: "success",
+      message: "User deleted successfully!",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
 const validateToken = async (req, res) => {
   try {
     // Had to pass req, res and next to jwtValidate function to make it work
@@ -106,5 +141,6 @@ export default {
   createUser,
   userLogin,
   getUserById,
+  deleteUserById,
   validateToken,
 };
