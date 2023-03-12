@@ -11,8 +11,10 @@ const upload = multer({ storage: storage });
 router.route("/new").post(upload.array("images"), itemController.createItem);
 router.route("/get/all").get(itemController.getItems);
 router.route("/user/get").get(itemController.getItemsByUserId);
-router.route("/get/one").get(itemController.getItemsById);
-router.route("/update").put(itemController.updateItemById);
-router.route("/delete").delete(itemController.deleteItemById);
+router.route("/get/one/:id").get(itemController.getItemsById);
+router
+  .route("/update/:id")
+  .put(upload.array("images"), itemController.updateItemById);
+router.route("/delete/:id").delete(itemController.deleteItemById);
 
 export default router;
