@@ -20,10 +20,16 @@ const createItem = async (req, res) => {
           },
         }
       );
+
+      req.body.role = response.data.data.role;
       req.body.userId = response.data.data._id;
       req.body.username = response.data.data.username;
     } catch (error) {
       throw new Error("Error while getting the user ID: " + error);
+    }
+
+    if (req.body.role !== "seller") {
+      throw new Error("You are not authorized to create items!");
     }
 
     const item = new itemValidation(req);
