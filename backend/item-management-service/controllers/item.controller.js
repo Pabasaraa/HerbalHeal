@@ -1,5 +1,6 @@
 import axios from "axios";
 import itemService from "../services/item.service.js";
+import searchItems from "../services/search.service.js";
 import itemValidation from "../services/validation.service.js";
 
 const createItem = async (req, res) => {
@@ -62,7 +63,10 @@ const getItems = async (req, res) => {
       data: items,
     });
   } catch (error) {
-    throw new Error("Error while fetching items: " + error);
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
   }
 };
 
@@ -95,7 +99,10 @@ const getItemsByUserId = async (req, res) => {
       data: items,
     });
   } catch (error) {
-    throw new Error("Error while fetching items: " + error);
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
   }
 };
 
@@ -109,7 +116,27 @@ const getItemsById = async (req, res) => {
       data: item,
     });
   } catch (error) {
-    throw new Error("Error while fetching item: " + error);
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
+const searchItemsByTerm = async (req, res) => {
+  try {
+    const items = await searchItems(req.body.searchTerm);
+
+    res.status(200).json({
+      status: "success",
+      message: "Items fetched successfully!",
+      data: items,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
   }
 };
 
@@ -149,7 +176,10 @@ const updateItemById = async (req, res) => {
       data: updateditem,
     });
   } catch (error) {
-    throw new Error("Error while updating item: " + error);
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
   }
 };
 
@@ -162,7 +192,10 @@ const deleteItemById = async (req, res) => {
       message: "Item deleted successfully!",
     });
   } catch (error) {
-    throw new Error("Error while deleting item: " + error);
+    res.status(400).json({
+      status: "error",
+      message: error.message,
+    });
   }
 };
 
@@ -171,6 +204,7 @@ export default {
   getItems,
   getItemsByUserId,
   getItemsById,
+  searchItemsByTerm,
   updateItemById,
   deleteItemById,
 };
