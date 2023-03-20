@@ -13,7 +13,7 @@ const createItem = async (req, res) => {
     // Get the user ID from the token and add it to the request body
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/validatetoken",
+        "http://localhost:8000/users/validatetoken",
         {},
         {
           headers: {
@@ -78,7 +78,7 @@ const getItemsByUserId = async (req, res) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/validatetoken",
+        "http://localhost:8000/users/validatetoken",
         {},
         {
           headers: {
@@ -147,7 +147,7 @@ const updateItemById = async (req, res) => {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/validatetoken",
+        "http://localhost:8000/users/validatetoken",
         {},
         {
           headers: {
