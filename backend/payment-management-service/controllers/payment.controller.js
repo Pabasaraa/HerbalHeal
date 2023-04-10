@@ -10,7 +10,7 @@ const createPayment = async (req, res) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/validatetoken",
+        "http://localhost:8000/users/validatetoken",
         {},
         {
           headers: {
@@ -52,7 +52,7 @@ const getPaymentByUserId = async (req, res) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/validatetoken",
+        "http://localhost:8000/users/validatetoken",
         {},
         {
           headers: {
@@ -88,7 +88,7 @@ const updatePaymentByUserId = async (req, res) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/validatetoken",
+        "http://localhost:8000/users/validatetoken",
         {},
         {
           headers: {
@@ -133,7 +133,7 @@ const deletePaymentByUserId = async (req, res) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/validatetoken",
+        "http://localhost:8000/users/validatetoken",
         {},
         {
           headers: {
