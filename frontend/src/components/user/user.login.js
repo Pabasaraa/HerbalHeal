@@ -1,15 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import styles from "./styles/login.module.css";
 
-import { login } from "../../redux/slices/user.slice";
-
 const Login = () => {
-  const dispatch = useDispatch();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const validateToken = () => {
+    if (!localStorage.getItem("token")) return;
+
+    axios
+      .post(
+        "http://localhost:8000/users/validatetoken",
+        {},
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        navigate("/profile");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    validateToken(); // eslint-disable-next-line
+  }, []);
+
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -30,13 +54,9 @@ const Login = () => {
       .post("http://localhost:8000/users/login", user)
       .then((response) => {
         alert("Login successful!");
-        dispatch(
-          login({
-            token: response.data.data.token,
-            username: response.data.data.username,
-            role: response.data.data.role,
-          })
-        );
+
+        localStorage.setItem("token", response.data.data.token);
+        navigate("/profile");
       })
       .catch((error) => {
         alert("Login failed, " + error.response.data.message);

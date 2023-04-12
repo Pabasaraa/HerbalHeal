@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import styles from "./styles/register.module.css";
 
 const Register = () => {
@@ -11,6 +12,8 @@ const Register = () => {
     password: "",
     repeatPassword: "",
   });
+
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -25,6 +28,7 @@ const Register = () => {
       .post("http://localhost:8000/users/register", formData)
       .then(() => {
         alert("Registration successful!");
+        navigate("/login");
       })
       .catch((err) => {
         alert("Registration failed, " + err.response.data.message);

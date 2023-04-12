@@ -91,7 +91,7 @@ const getUserById = async (req, res) => {
 
 const deleteUserById = async (req, res) => {
   try {
-    if (!req.body.token) {
+    if (!req.headers["x-access-token"]) {
       throw new Error("No token provided!");
     }
 
@@ -101,7 +101,7 @@ const deleteUserById = async (req, res) => {
         {},
         {
           headers: {
-            "x-access-token": req.body.token,
+            "x-access-token": req.headers["x-access-token"],
           },
         }
       );
