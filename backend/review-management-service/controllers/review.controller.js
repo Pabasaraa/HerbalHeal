@@ -44,7 +44,7 @@ const createReview = async (req, res) => {
 
 const getReviewsById = async (req, res) => {
   try {
-    const reviews = await reviewService.getReviewsById(req.body.id);
+    const reviews = await reviewService.getReviewsById(req.params.id);
 
     res.status(200).json({
       status: "success",
