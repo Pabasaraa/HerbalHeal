@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { Card, Form, Button, Container, Row, Col } from "react-bootstrap";
 import styles from "./styles/seller.profile.module.css";
 
 const SellerProfile = () => {
@@ -55,59 +56,77 @@ const SellerProfile = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <Container className={styles.sellerProfileContainer}>
       {sellerInfo.username ? (
         <div>
-          <h2>{sellerInfo.username}</h2>
-          <p>Full Name: {sellerInfo.name}</p>
-          <p>Email: {sellerInfo.email}</p>
-          <h3>Reviews:</h3>
-          {/** form to submit a review */}
-          <form className={styles.form} onSubmit={handleSubmit}>
-            <label className={styles.label} htmlFor="review">
-              Leave a review:
-            </label>
-            <h4 htmlFor="reviewTitle">Review Title:</h4>
-            <input
-              className={styles.input}
-              type="text"
-              id="review"
-              name="reviewTitle"
-            />
-            <h4 htmlFor="reviewBody">Review Body:</h4>
-            <input
-              className={styles.input}
-              type="text"
-              id="review"
-              name="reviewBody"
-            />
-            <br />
-            <button className={styles.button} type="submit">
-              Submit
-            </button>
-          </form>
-          <ul className={styles.ul}>
+          <h2 className="text-center mt-1 mb-5">Seller Profile</h2>
+          <Row>
+            <Col
+              md={4}
+              className={styles.sellerInfo}
+              style={{ marginRight: "auto" }}
+            >
+              <h2>{sellerInfo.username}</h2>
+              <p className={styles.sellerName}>
+                <b>Full Name:</b> {sellerInfo.name}
+              </p>
+              <p className={styles.sellerEmail}>
+                <b>Email:</b> {sellerInfo.email}
+              </p>
+            </Col>
+            <Col md={8} className={styles.reviewForm}>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="reviewTitle">
+                  <Form.Label>Write a Review</Form.Label>
+                  <Form.Control
+                    className="mt-2"
+                    type="text"
+                    placeholder="Enter review title"
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="reviewBody">
+                  <Form.Control
+                    className="mt-3"
+                    as="textarea"
+                    rows={3}
+                    placeholder="Write your review"
+                    required
+                  />
+                </Form.Group>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  className="submit-btn mt-3"
+                >
+                  Submit
+                </Button>
+              </Form>
+            </Col>
+          </Row>
+          <h3 className={styles.reviewsHeader}>Reviews:</h3>
+          <Row>
             {reviews.map((review, index) => (
-              <li className={styles.li} key={index}>
-                <h3>
-                  <i>Review Title:</i> <br />
-                  {review.reviewTitle}
-                </h3>
-                <p>
-                  <i>Review Body:</i> <br />
-                  {review.reviewBody}
-                </p>
-                <p>
-                  <i>Posted By:</i> {review.postedBy}
-                </p>
-              </li>
+              <Col md={4} key={index}>
+                <Card className="my-3">
+                  <Card.Body>
+                    <Card.Title>{review.reviewTitle}</Card.Title>
+                    <Card.Text>{review.reviewBody}</Card.Text>
+                    <Card.Footer>
+                      <small className="text-muted">
+                        Posted By: {review.postedBy}
+                      </small>
+                    </Card.Footer>
+                  </Card.Body>
+                </Card>
+              </Col>
             ))}
-          </ul>
+          </Row>
         </div>
       ) : (
         <h2>Loading...</h2>
       )}
-    </div>
+    </Container>
   );
 };
 
