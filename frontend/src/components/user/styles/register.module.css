@@ -1,4 +1,4 @@
-.container {
+/* .container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,7 +31,6 @@
     margin-bottom: 0.5rem;
   }
   
-  /* These affect all input elements in every page */
   input[type='text'],
   input[type='email'],
   input[type='password'] {
@@ -64,4 +63,4 @@
   
   button:hover {
     background-color: #2980b9;
-  }
+  } */

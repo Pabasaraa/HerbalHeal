@@ -1,0 +1,51 @@
+.sellerProfileContainer {
+  margin-top: 20px;
+  background-color: #f6f6f6;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px #dcdcdc;
+}
+
+.sellerInfo {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px 0px 0px 10px;
+  box-shadow: 0px 0px 10px #dcdcdc;
+}
+
+.sellerName {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.sellerEmail {
+  margin-bottom: 10px;
+}
+
+.reviewForm {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 0px 10px 10px 0px;
+  box-shadow: 0px 0px 10px #dcdcdc;
+}
+
+.reviewForm h2 {
+  margin-bottom: 20px;
+}
+
+.reviewsHeader {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.submit-btn {
+  margin-top: 20px;
+  float: right;
+}
+
+@media screen and (max-width: 768px) {
+  .sellerInfo,
+  .reviewForm {
+    margin-bottom: 20px;
+  }
+}
