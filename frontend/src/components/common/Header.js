@@ -1,9 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import "./styles/Header.css";
+
+import Button from "./Button";
+
+// Assets
 import Logo from "../../Assets/Logo.png";
-import './Style/Header.css';
+
+// React Icons
 import { BsCart2 } from "react-icons/bs";
 import { HiOutlineBars3 } from "react-icons/hi2";
+
+// Material UI
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -20,6 +31,40 @@ import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      if (!localStorage.getItem("token")) {
+        setIsLoggedIn(false);
+        return;
+      }
+
+      axios
+        .post(
+          "http://localhost:8000/users/validatetoken",
+          {},
+          {
+            headers: {
+              "x-access-token": localStorage.getItem("token"),
+            },
+          }
+        )
+        .then(() => {
+          setIsLoggedIn(true);
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsLoggedIn(false);
+        });
+    };
+
+    checkLoginStatus();
+  }, [token]);
+
   const menuOptions = [
     {
       text: "Home",
@@ -43,9 +88,18 @@ const Header = () => {
     },
   ];
   return (
-    <nav>
+    <nav style={{ height: "auto" }}>
       <div className="nav-logo-container">
-        <img src={Logo} alt="" />
+        <img
+          src={Logo}
+          alt=""
+          onClick={() => {
+            navigate("/");
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.cursor = "pointer";
+          }}
+        />
       </div>
       <div className="navbar-links-container">
         <a href="">Home</a>
@@ -55,7 +109,24 @@ const Header = () => {
         <a href="">
           <BsCart2 className="navbar-cart-icon" />
         </a>
-        <button className="primary-button">Become a Seller</button>
+
+        {isLoggedIn ? (
+          <Button
+            text="Log out"
+            onClick={() => {
+              localStorage.removeItem("token");
+              setIsLoggedIn(false);
+              navigate("/login");
+            }}
+          />
+        ) : (
+          <Button
+            text="Sign up"
+            onClick={() => {
+              navigate("/register");
+            }}
+          />
+        )}
       </div>
       <div className="navbar-menu-container">
         <HiOutlineBars3 onClick={() => setOpenMenu(true)} />
@@ -85,4 +156,3 @@ const Header = () => {
 };
 
 export default Header;
-
