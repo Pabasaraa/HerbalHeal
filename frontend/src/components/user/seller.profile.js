@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Card, Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Card, Form, Button, Badge } from "react-bootstrap";
+import Loader from "../common/Spinner";
 import styles from "./styles/seller.profile.module.css";
 
 const SellerProfile = () => {
   const [sellerInfo, setSellerInfo] = useState({});
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState(null);
 
   const params = useParams();
 
@@ -30,7 +31,9 @@ const SellerProfile = () => {
       console.log(reviews.data.data);
       setReviews(reviews.data.data);
     };
-    fetchReviews();
+    setTimeout(() => {
+      fetchReviews();
+    }, 2000);
   }, [seller_id]);
 
   const handleSubmit = (event) => {
@@ -56,77 +59,84 @@ const SellerProfile = () => {
   };
 
   return (
-    <Container className={styles.sellerProfileContainer}>
+    <div>
       {sellerInfo.username ? (
-        <div>
-          <h2 className="text-center mt-1 mb-5">Seller Profile</h2>
-          <Row>
-            <Col
-              md={4}
-              className={styles.sellerInfo}
-              style={{ marginRight: "auto" }}
-            >
-              <h2>{sellerInfo.username}</h2>
-              <p className={styles.sellerName}>
-                <b>Full Name:</b> {sellerInfo.name}
-              </p>
-              <p className={styles.sellerEmail}>
-                <b>Email:</b> {sellerInfo.email}
-              </p>
-            </Col>
-            <Col md={8} className={styles.reviewForm}>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="reviewTitle">
-                  <Form.Label>Write a Review</Form.Label>
-                  <Form.Control
-                    className="mt-2"
-                    type="text"
-                    placeholder="Enter review title"
-                    required
-                  />
-                </Form.Group>
-                <Form.Group controlId="reviewBody">
-                  <Form.Control
-                    className="mt-3"
-                    as="textarea"
-                    rows={3}
-                    placeholder="Write your review"
-                    required
-                  />
-                </Form.Group>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  className="submit-btn mt-3"
-                >
-                  Submit
-                </Button>
-              </Form>
-            </Col>
-          </Row>
-          <h3 className={styles.reviewsHeader}>Reviews:</h3>
-          <Row>
-            {reviews.map((review, index) => (
-              <Col md={4} key={index}>
-                <Card className="my-3">
+        <div className={styles.sellerProfileContainer}>
+          <h2 className="text-center mt-1 mb-4">Seller Profile</h2>
+          <Card className="mb-5" style={{ width: "30rem" }}>
+            <Card.Body>
+              <Card.Title>{sellerInfo.username}</Card.Title>
+              <Badge pill variant="info" bg="info">
+                Seller
+              </Badge>
+              <Card.Text className="mt-4 mb-4">
+                <Card.Subtitle className="mb-3 text-muted">
+                  Seller Details
+                </Card.Subtitle>
+                <div className="mb-1">
+                  <b>Full Name:</b> {sellerInfo.name}
+                </div>
+                <div className="mb-2">
+                  <b>Email:</b> {sellerInfo.email}
+                </div>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+          <div className={styles.reviewForm}>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="reviewTitle">
+                <Form.Label>
+                  <h5>Write a Review</h5>
+                </Form.Label>
+                <Form.Control
+                  className="mt-2"
+                  type="text"
+                  placeholder="Enter review title"
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="reviewBody">
+                <Form.Control
+                  className="mt-3"
+                  as="textarea"
+                  rows={3}
+                  placeholder="Write your review"
+                  required
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                type="submit"
+                className="submit-btn mt-3"
+              >
+                Submit
+              </Button>
+            </Form>
+          </div>
+          {reviews ? (
+            <div className={styles.payments}>
+              <h3 className="mb-4 mt-5">Reviews & Ratings</h3>
+              {reviews.map((review) => (
+                <Card className="mb-4" style={{ width: "100%" }}>
                   <Card.Body>
                     <Card.Title>{review.reviewTitle}</Card.Title>
-                    <Card.Text>{review.reviewBody}</Card.Text>
-                    <Card.Footer>
-                      <small className="text-muted">
-                        Posted By: {review.postedBy}
-                      </small>
-                    </Card.Footer>
+                    <Card.Subtitle className="mb-3 text-muted">
+                      <span style={{ fontSize: "0.9rem" }}>Posted By:</span>{" "}
+                      {review.postedBy}
+                    </Card.Subtitle>
+                    <Card.Body>{review.reviewBody}</Card.Body>
                   </Card.Body>
                 </Card>
-              </Col>
-            ))}
-          </Row>
+              ))}
+            </div>
+          ) : (
+            <Loader />
+          )}
         </div>
       ) : (
-        <h2>Loading...</h2>
+        <Loader />
       )}
-    </Container>
+    </div>
   );
 };
 

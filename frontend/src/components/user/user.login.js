@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
+// Common components
+import Button from "../common/Button";
+
+// Module CSS
 import styles from "./styles/login.module.css";
 
 const Login = () => {
@@ -68,7 +73,10 @@ const Login = () => {
     <section className={styles.gradientForm}>
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div
+            className="col-12 col-md-8 col-lg-6 col-xl-5"
+            style={{ margin: "20px" }}
+          >
             <div
               className="card shadow-2-strong"
               style={{
@@ -78,7 +86,7 @@ const Login = () => {
               }}
             >
               <div className="card-body p-5 text-center">
-                <form onSubmit={handleSubmit}>
+                <form>
                   <h2 className="mb-3">Sign in</h2>
 
                   <hr className="mb-5" style={{ opacity: "0.15" }} />
@@ -127,13 +135,7 @@ const Login = () => {
                     </label>
                   </div>
 
-                  <button
-                    className={styles.btn_login}
-                    style={{ marginTop: "15px", width: "fit-content" }}
-                    type="submit"
-                  >
-                    Login
-                  </button>
+                  <Button text="Login" onClick={handleSubmit} />
 
                   <hr className="my-4" style={{ opacity: "0.15" }} />
 

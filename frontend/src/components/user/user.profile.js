@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Card, Button, Badge } from "react-bootstrap";
+import Loader from "../common/Spinner";
+
 import styles from "./styles/profile.module.css";
-import axios from "axios";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
+  const [reviews, setReviews] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const navigate = useNavigate();
 
@@ -44,6 +47,19 @@ const Profile = () => {
     console.log("validating token");
     ValidateToken(getUser);
   }, []);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      const reviews = await axios.get(
+        `http://localhost:8000/reviews/${user._id}`
+      );
+      console.log(reviews.data.data);
+      setReviews(reviews.data.data);
+    };
+    setTimeout(() => {
+      fetchReviews();
+    }, 2000);
+  }, [user]);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -88,7 +104,15 @@ const Profile = () => {
             </Card.Subtitle>
             <br />
           </div>
-          <Card style={{ width: "30rem" }}>
+          <Card
+            style={{
+              width: "30rem",
+              border: "none",
+              paddingLeft: "1rem",
+              borderRadius: "15px",
+              boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+            }}
+          >
             <Card.Body>
               <Card.Title>{user.name}</Card.Title>
               {user.role === "seller" ? (
@@ -117,24 +141,35 @@ const Profile = () => {
             </Card.Body>
           </Card>
           {user.role === "seller" ? (
-            <div className={styles.payments}>
-              <h3 className="mb-4 mt-5">Reviews & Ratings</h3>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Review #1</Card.Title>
-                  <Card.Subtitle className="mb-3 text-muted">
-                    <span style={{ fontSize: "0.9rem" }}>Posted By:</span>{" "}
-                    sandaluu
-                  </Card.Subtitle>
-                  <Card.Header>Test Review Title</Card.Header>
-                  <Card.Body>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Maecenas vel mi elit. Ut malesuada, tortor at dictum semper,
-                    quam sapien accumsan urna, vitae bibendum ante nisl sit amet
-                    turpis.
-                  </Card.Body>
-                </Card.Body>
-              </Card>
+            <div>
+              {reviews ? (
+                <div className={styles.payments}>
+                  <h2 className="mb-5 mt-3">Reviews About You!</h2>
+                  {reviews.map((review) => (
+                    <Card
+                      className="mb-4"
+                      style={{
+                        width: "100%",
+                        border: "none",
+                        borderRadius: "15px",
+                        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                      }}
+                    >
+                      <Card.Body>
+                        <Card.Title>{review.reviewTitle}</Card.Title>
+                        <Card.Subtitle className="mb-3 text-muted">
+                          <span style={{ fontSize: "0.9rem" }}>Posted By:</span>{" "}
+                          {review.postedBy}
+                        </Card.Subtitle>
+                        <hr style={{ opacity: "0.15" }} />
+                        <Card.Body>{review.reviewBody}</Card.Body>
+                      </Card.Body>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Loader />
+              )}
             </div>
           ) : (
             <div className={styles.orders}>
@@ -192,7 +227,7 @@ const Profile = () => {
           )}
         </div>
       ) : (
-        <h1>Loading ....</h1>
+        <Loader />
       )}
     </div>
   );
