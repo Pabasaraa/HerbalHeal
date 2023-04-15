@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 import Header from "./components/common/Header";
 
@@ -9,6 +10,7 @@ import Profile from "./components/user/user.profile";
 import SellerProfile from "./components/user/seller.profile";
 
 import ProductsList from "./components/product/products.list.js";
+import ProductSingle from "./components/product/products.single.js";
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
           <Route path="/sellers/:id" element={<SellerProfile />} />
 
           <Route path="/products" element={<ProductsList />} />
+          <Route path="/products/:id" element={<ProductSingle />} />
         </Routes>
       </div>
     </Router>

@@ -143,29 +143,33 @@ const Profile = () => {
           {user.role === "seller" ? (
             <div>
               {reviews ? (
-                <div className={styles.payments}>
-                  <h2 className="mb-5 mt-3">Reviews About You!</h2>
-                  {reviews.map((review) => (
-                    <Card
-                      className="mb-4"
-                      style={{
-                        width: "100%",
-                        border: "none",
-                        borderRadius: "15px",
-                        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                      }}
-                    >
-                      <Card.Body>
-                        <Card.Title>{review.reviewTitle}</Card.Title>
-                        <Card.Subtitle className="mb-3 text-muted">
-                          <span style={{ fontSize: "0.9rem" }}>Posted By:</span>{" "}
-                          {review.postedBy}
-                        </Card.Subtitle>
-                        <hr style={{ opacity: "0.15" }} />
-                        <Card.Body>{review.reviewBody}</Card.Body>
-                      </Card.Body>
-                    </Card>
-                  ))}
+                <div className="row mt-5" style={{ width: "100%" }}>
+                  <div className="col">
+                    <h3>Reviews ({reviews.length})</h3>
+                    <hr className={styles.horizontalLine} />
+                    <div className="container">
+                      {reviews.map((review, index) => (
+                        <Card
+                          key={index}
+                          className="mb-4"
+                          style={{ width: "100%" }}
+                        >
+                          <Card.Body>
+                            <Card.Title>{review.reviewTitle}</Card.Title>
+                            <Card.Subtitle className="mb-3 text-muted">
+                              <p>
+                                <span style={{ fontSize: "0.8rem" }}>
+                                  Posted By: {review.postedBy}
+                                </span>{" "}
+                              </p>
+                            </Card.Subtitle>
+                            <hr className={styles.horizontalLine} />
+                            <Card.Body>{review.reviewBody}</Card.Body>
+                          </Card.Body>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <Loader />
@@ -178,9 +182,7 @@ const Profile = () => {
                   You have no orders yet..{" "}
                   <button
                     className={styles.clickableText}
-                    onClick={() => {
-                      alert("Shop is under development");
-                    }}
+                    onClick={() => navigate("/products")}
                   >
                     Shop now
                   </button>

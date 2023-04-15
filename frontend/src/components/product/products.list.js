@@ -9,7 +9,7 @@ import Loader from "../common/Spinner";
 
 const ProductsList = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   const [imageBuffers, setImageBuffers] = useState([]);
   const [base64Strings, setBase64Strings] = useState([]);
 
@@ -28,8 +28,10 @@ const ProductsList = () => {
   }, []);
 
   useEffect(() => {
-    const buffers = products.map((product) => product.itemImages[0].data);
-    setImageBuffers(buffers);
+    if (products) {
+      const buffers = products.map((product) => product.itemImages[0].data);
+      setImageBuffers(buffers);
+    }
   }, [products]);
 
   useEffect(() => {
@@ -64,7 +66,7 @@ const ProductsList = () => {
         </InputGroup>
         <h5>All Products:</h5>
         <br />
-        {products.length > 0 && base64Strings.length > 0 ? (
+        {products && base64Strings.length > 0 ? (
           <div className={styles.productGrid}>
             {products.map((product, key) => (
               <Card key={product.id} className={styles.productCard}>
@@ -80,7 +82,10 @@ const ProductsList = () => {
                   <Card.Text style={{ marginTop: "-10px" }}>
                     <small className="text-muted">{product.username}</small>
                   </Card.Text>
-                  <Card.Text className={styles.productPrice}>
+                  <Card.Text
+                    className={`
+                    text-success ${styles.productPrice}`}
+                  >
                     {product.itemPrice} LKR
                   </Card.Text>
                   <hr style={{ opacity: "0.15", marginBottom: "25px" }} />
