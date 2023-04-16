@@ -12,6 +12,9 @@ import SellerProfile from "./components/user/seller.profile";
 import ProductsList from "./components/product/products.list.js";
 import ProductSingle from "./components/product/products.single.js";
 
+
+import Cart from "./components/cart/cart.page";
+
 function App() {
   return (
     <Router>
@@ -25,6 +28,9 @@ function App() {
 
           <Route path="/products" element={<ProductsList />} />
           <Route path="/products/:id" element={<ProductSingle />} />
+
+          {/* chavi */}
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </div>
     </Router>
