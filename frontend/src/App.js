@@ -29,7 +29,6 @@ function App() {
           <Route path="/products" element={<ProductsList />} />
           <Route path="/products/:id" element={<ProductSingle />} />
 
-          {/* chavi */}
           <Route path="/cart" element={<Cart />} />
         </Routes>
       </div>
