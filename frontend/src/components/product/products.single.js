@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
 import axios from "axios";
+
+import { addToCart } from "../../redux/slices/cart.slice";
 
 import Loader from "../common/Spinner";
 
@@ -14,6 +18,8 @@ const ProductSingle = () => {
   const [imageData, setImageData] = useState(null);
 
   const params = useParams();
+  
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -52,6 +58,40 @@ const ProductSingle = () => {
     } else if (action === "decrement") {
       if (quantity > 1) {
         setQuantity(quantity - 1);
+      }
+    }
+  };
+
+  //chavi
+  const handleAddToCart = () => {
+    if (!localStorage.getItem("token")) {
+      alert("Please login first to add to cart!");
+      return;
+    } else {
+      const cart = localStorage.getItem("cartItems");
+
+      const cartItem = {
+        itemName: product.itemName,
+        itemPrice: product.itemPrice,
+        itemQuantity: quantity,
+        itemImage: imageData,
+      };
+
+      if (cart) {
+        const cartItems = JSON.parse(cart);
+        const itemExists = cartItems.find(
+          (item) => item.itemName === cartItem.itemName
+        );
+        if (itemExists) {
+          alert("Item already exists in the cart!");
+          return;
+        }
+        cartItems.push(cartItem);
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+        console.log(JSON.parse(localStorage.getItem("cartItems")));
+      } else {
+        localStorage.setItem("cartItems", JSON.stringify([cartItem]));
+        console.log(JSON.parse(localStorage.getItem("cartItems")));
       }
     }
   };
@@ -176,7 +216,12 @@ const ProductSingle = () => {
                     +
                   </Button>
                 </div>
-                <Button variant="success" size="lg" className="w-100">
+                <Button
+                  variant="success"
+                  size="lg"
+                  className="w-100"
+                  onClick={handleAddToCart}
+                >
                   Add to cart
                 </Button>
               </Card.Body>
