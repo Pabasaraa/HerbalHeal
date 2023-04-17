@@ -1,0 +1,51 @@
+.container {
+    padding: 20px;
+  }
+  
+  .heading {
+    text-align: center;
+  }
+  
+  .card {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 15px;
+  }
+  
+  .header {
+    background-color: rgba(237, 237, 237, 0.4);
+    border-bottom: 1px solid #ccc;
+    border-radius: 15px;
+    padding: 10px;
+  }
+  
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .pending {
+    color: orange;
+  }
+  
+  .accepted {
+    color: green;
+  }
+  
+  .rejected {
+    color: red;
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+
+  .btn {
+    margin-left: 10px;
+    height: auto;
+    padding: 5px 15px;
+  }
