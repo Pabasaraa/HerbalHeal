@@ -8,6 +8,10 @@ import Register from "./components/user/user.register";
 import Profile from "./components/user/user.profile";
 import SellerProfile from "./components/user/seller.profile";
 import AddItem from "./components/item/addItem";
+import ItemList from "./components/item/itemList";
+import UpdateItem from "./components/item/updateItem";
+
+
 
 function App() {
   return (
@@ -20,6 +24,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/sellers/:id" element={<SellerProfile />} />
           <Route path="/addItem" element={<AddItem />} />
+          <Route path="/itemList" element={<ItemList />} />
+          <Route path="/updateItem" element={<UpdateItem />} />
         </Routes>
       </div>
     </Router>

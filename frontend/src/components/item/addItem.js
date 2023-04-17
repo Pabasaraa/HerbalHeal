@@ -18,22 +18,32 @@ const AddItem = () => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
+    setItemImages(event.target.files[0])
+    
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
-
+    const formData = new FormData();
+    formData.append('file', itemImages);
+    formData.append('fileName', itemImages.name);
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    };
     axios
-      .post("http://localhost:8000/items/new", formData)
+      .post("http://localhost:8000/items/new", formData, config)
       .then(() => {
         alert("Add item successful!");
-        navigate("/login");
+        navigate("/itemList");
       })
       .catch((err) => {
         alert("Add item failed, " + err.response.data.message);
       });
   };
+
+  
 
   return (
     <section>
@@ -128,7 +138,7 @@ const AddItem = () => {
                       className="form-control"
                       placeholder="Item Images"
                       name="itemImages"
-                      value={itemImages}
+                      value={formData.itemImages}
                       onChange={(e) => setItemImages(e.target.files[0])}
                       required
                     />
@@ -139,6 +149,7 @@ const AddItem = () => {
                   <button
                     className={styles.btn_login}
                     style={{ marginTop: "15px", width: "fit-content" }}
+                    onClick={() => navigate("/itemList")}
                     type="submit"
                   >
                     Save
@@ -146,15 +157,6 @@ const AddItem = () => {
 
                   <hr className="my-4" style={{ opacity: "0.15" }} />
 
-                  <div className="d-flex align-items-center justify-content-center pb-4">
-                   
-                    <button
-                      className={styles.clickableText}
-                      onClick={() => navigate("/login")}
-                    >
-                     Item List
-                    </button>
-                  </div>
                 </form>
               </div>
             </div>
