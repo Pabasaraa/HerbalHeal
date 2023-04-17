@@ -7,6 +7,7 @@ import Login from "./components/user/user.login";
 import Register from "./components/user/user.register";
 import Profile from "./components/user/user.profile";
 import SellerProfile from "./components/user/seller.profile";
+import AddItem from "./components/item/addItem";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/sellers/:id" element={<SellerProfile />} />
+          <Route path="/addItem" element={<AddItem />} />
         </Routes>
       </div>
     </Router>
