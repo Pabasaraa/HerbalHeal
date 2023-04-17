@@ -16,6 +16,8 @@ import Cart from "./components/cart/cart.page";
 
 import AdminHome from "./components/admin/admin.home";
 
+import Checkout from "./components/payment/checkout.page";
+
 function App() {
   return (
     <Router>
@@ -33,6 +35,8 @@ function App() {
           <Route path="/cart" element={<Cart />} />
 
           <Route path="/admin" element={<AdminHome />} />
+
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </div>
     </Router>

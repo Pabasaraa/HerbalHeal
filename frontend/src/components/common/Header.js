@@ -107,7 +107,7 @@ const Header = () => {
         <a href="/products">Items</a>
         <a href="">Review</a>
         <a href="">Contact</a>
-        <a href="">
+        <a href="/cart">
           <BsCart2 className="navbar-cart-icon" />
         </a>
 
