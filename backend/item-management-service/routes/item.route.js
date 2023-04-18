@@ -12,7 +12,7 @@ router.route("/new").post(upload.array("images"), itemController.createItem);
 router.route("/get/all").get(itemController.getItems);
 router.route("/user/get").get(itemController.getItemsByUserId);
 router.route("/:id").get(itemController.getItemsById);
-router.route("/search").get(itemController.searchItemsByTerm);
+router.route("/search").post(itemController.searchItemsByTerm);
 router.route("/delete/:id").delete(itemController.deleteItemById);
 router
   .route("/update/:id")

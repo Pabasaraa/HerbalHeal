@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./styles/Cart.module.css";
 
 const Cart = () => {
-  const [shippingMethod, setShippingMethod] = useState("");
+  const [shippingMethod, setShippingMethod] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  const [shippingDetails, setShippingDetails] = useState({
-    name: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
-  });
+  const [streetAddress, setStreetAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zip, setZip] = useState("");
+  const [country, setCountry] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const cartItems = JSON.parse(localStorage.getItem("cartItems"));
@@ -20,28 +21,18 @@ const Cart = () => {
     if (cartItems) {
       setCartItems(cartItems);
     }
-
-    console.log(cartItems);
   }, [localStorage.getItem("cartItems")]);
 
   const handleShippingMethodChange = (event) => {
     setShippingMethod(event.target.value);
   };
 
-  const handleShippingDetailsChange = (event) => {
-    setShippingDetails({
-      ...shippingDetails,
-      [event.target.name]: event.target.value,
-    });
-  };
-
   function removeItem(itemName) {
     const cartItems = JSON.parse(localStorage.getItem("cartItems"));
-    console.log("HI" + itemName);
     const newCartItems = cartItems.filter((item) => item.itemName !== itemName);
+
     localStorage.setItem("cartItems", JSON.stringify(newCartItems));
     setCartItems(newCartItems);
-    console.log(newCartItems);
   }
 
   const itemsTotal = cartItems
@@ -56,6 +47,33 @@ const Cart = () => {
 
   const shippingPrice = shippingMethod === "home_delivery" ? 1500 : 0;
   const total = subtotal + shippingPrice;
+
+  const handleProceedToPayment = () => {
+    const transactionDetails = {
+      shippingDetails: {
+        streetAddress,
+        city,
+        state,
+        zip,
+        country,
+      },
+      subtotal,
+      shippingPrice,
+      total,
+    };
+
+    if (!localStorage.getItem("token")) {
+      alert("Please login & comeback to checkout!");
+      navigate("/login");
+    } else {
+      localStorage.setItem(
+        "transactionDetails",
+        JSON.stringify(transactionDetails)
+      );
+
+      navigate("/checkout");
+    }
+  };
 
   const renderProducts = () => {
     return (
@@ -137,9 +155,10 @@ const Cart = () => {
                 className="form-control"
                 id="inputStreet"
                 placeholder="Street Address"
-                value={shippingDetails.zip}
-                onChange={handleShippingDetailsChange}
+                value={streetAddress}
+                onChange={(event) => setStreetAddress(event.target.value)}
                 style={{ paddingLeft: "15px" }}
+                required
               />
             </div>
           </div>
@@ -157,9 +176,10 @@ const Cart = () => {
                 className="form-control"
                 id="inputCountry"
                 placeholder="Country"
-                value={shippingDetails.zip}
-                onChange={handleShippingDetailsChange}
+                value={country}
+                onChange={(event) => setCountry(event.target.value)}
                 style={{ paddingLeft: "15px" }}
+                required
               />
             </div>
           </div>
@@ -178,9 +198,10 @@ const Cart = () => {
                 id="inputCard"
                 pattern="\d*"
                 placeholder="City"
-                value={shippingDetails.zip}
-                onChange={handleShippingDetailsChange}
+                value={city}
+                onChange={(event) => setCity(event.target.value)}
                 style={{ paddingLeft: "15px" }}
+                required
               />
             </div>
           </div>
@@ -201,9 +222,10 @@ const Cart = () => {
                 className="form-control"
                 id="inputExpiryDate"
                 placeholder="State"
-                value={shippingDetails.zip}
-                onChange={handleShippingDetailsChange}
+                value={state}
+                onChange={(event) => setState(event.target.value)}
                 style={{ paddingLeft: "15px" }}
+                required
               />
             </div>
             <div className="form-group col-md-6">
@@ -219,9 +241,10 @@ const Cart = () => {
                 className="form-control"
                 id="inputCvv"
                 placeholder="Zip"
-                value={shippingDetails.zip}
-                onChange={handleShippingDetailsChange}
+                value={zip}
+                onChange={(event) => setZip(event.target.value)}
                 style={{ paddingLeft: "15px" }}
+                required
               />
             </div>
           </div>
@@ -331,7 +354,13 @@ const Cart = () => {
                 <h4 className={styles.cardSubText}>
                   Total: <span style={{ float: "right" }}>${total}</span>
                 </h4>
-                <Button variant="success" style={{ width: "100%" }}>
+                <Button
+                  variant="success"
+                  style={{ width: "100%" }}
+                  onClick={handleProceedToPayment}
+                  type="submit"
+                  {...(shippingMethod ? {} : { disabled: true })}
+                >
                   Proceed to checkout
                 </Button>
               </Card.Body>

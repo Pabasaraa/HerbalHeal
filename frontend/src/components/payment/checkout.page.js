@@ -7,13 +7,31 @@ import styles from "./styles/checkout.module.css";
 
 const Checkout = () => {
   const [data, setData] = useState([]);
+  const [transactionDetails, setTransactionDetails] = useState({});
+  const [paymentDetails] = useState({});
 
   useEffect(() => {
+    const retrieveData = () => {
+      const details = JSON.parse(localStorage.getItem("transactionDetails"));
+
+      setTransactionDetails(details);
+    };
+
     retrieveData();
   }, []);
 
-  const retrieveData = () => {
-    console.log("retrieveData");
+  const processPayment = () => {
+    console.log("processing Payment");
+
+    const paymentData = {
+      cardHoler: paymentDetails.cardHolder,
+      cardNumber: paymentDetails.cardNumber,
+      expirationDate: paymentDetails.expiryDate,
+      securityCode: paymentDetails.cvv,
+      billingAddress: transactionDetails.shippingDetails,
+    };
+
+    console.log(paymentData);
   };
 
   return (
@@ -23,13 +41,33 @@ const Checkout = () => {
           <div className={styles.flexChild}>
             <div className={styles.inputContainer}>
               <p className={`text-center margin-bottom ${styles.headertext}`}>
-                Checkout
+                <b>Checkout</b>
               </p>
               <form className="formt" style={{ margin: "0px 50px 0px 50px" }}>
                 <div className="row" style={{ marginTop: "15px" }}>
                   <div className="form-group">
                     <label
-                      for="inputCard"
+                      className={styles.label}
+                      style={{ marginBottom: "10px" }}
+                    >
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="inputCard"
+                      pattern="\d*"
+                      placeholder="Full Name"
+                      onChange={(e) => {
+                        paymentDetails.cardHolder = e.target.value;
+                      }}
+                      style={{ paddingLeft: "15px" }}
+                    />
+                  </div>
+                </div>
+                <div className="row" style={{ marginTop: "15px" }}>
+                  <div className="form-group">
+                    <label
                       className={styles.label}
                       style={{ marginBottom: "10px" }}
                     >
@@ -41,7 +79,9 @@ const Checkout = () => {
                       id="inputCard"
                       pattern="\d*"
                       placeholder="Card Number"
-                      defaultValue={data.card_num}
+                      onChange={(e) => {
+                        paymentDetails.cardNumber = e.target.value;
+                      }}
                       style={{ paddingLeft: "15px" }}
                     />
                   </div>
@@ -49,7 +89,6 @@ const Checkout = () => {
                 <div className="row" style={{ marginTop: "15px" }}>
                   <div className="form-group col-md-4">
                     <label
-                      for="inputCard"
                       className={styles.label}
                       style={{ marginBottom: "10px" }}
                     >
@@ -60,13 +99,14 @@ const Checkout = () => {
                       className="form-control"
                       id="inputExpiryDate"
                       placeholder="Expiry Date"
-                      defaultValue={data.expiry_date}
+                      onChange={(e) => {
+                        paymentDetails.expiryDate = e.target.value;
+                      }}
                       style={{ paddingLeft: "15px" }}
                     />
                   </div>
                   <div className="form-group col-md-4">
                     <label
-                      for="inputCard"
                       className={styles.label}
                       style={{ marginBottom: "10px" }}
                     >
@@ -77,7 +117,9 @@ const Checkout = () => {
                       className="form-control"
                       id="inputCvv"
                       placeholder="Cvv"
-                      defaultValue={data.cvv}
+                      onChange={(e) => {
+                        paymentDetails.cvv = e.target.value;
+                      }}
                       style={{ paddingLeft: "15px" }}
                     />
                   </div>
@@ -86,7 +128,6 @@ const Checkout = () => {
                   <div className="row" style={{ marginTop: "15px" }}>
                     <div className="form-group">
                       <label
-                        for="inputCard"
                         className={styles.label}
                         style={{ marginBottom: "10px" }}
                       >
@@ -97,7 +138,15 @@ const Checkout = () => {
                         className="form-control"
                         id="inputStreet"
                         placeholder="Street Address"
-                        defaultValue={data.street_address}
+                        defaultValue={
+                          transactionDetails.shippingDetails
+                            ? transactionDetails.shippingDetails.streetAddress
+                            : ""
+                        }
+                        onChange={(e) => {
+                          transactionDetails.shippingDetails.streetAddress =
+                            e.target.value;
+                        }}
                         style={{ paddingLeft: "15px" }}
                       />
                     </div>
@@ -105,7 +154,6 @@ const Checkout = () => {
                   <div className="row" style={{ marginTop: "15px" }}>
                     <div className={`form-group`}>
                       <label
-                        for="inputCard"
                         className={styles.label}
                         style={{ marginBottom: "10px" }}
                       >
@@ -116,7 +164,15 @@ const Checkout = () => {
                         className="form-control"
                         id="inputCountry"
                         placeholder="Country"
-                        defaultValue={data.country}
+                        defaultValue={
+                          transactionDetails.shippingDetails
+                            ? transactionDetails.shippingDetails.country
+                            : ""
+                        }
+                        onChange={(e) => {
+                          transactionDetails.shippingDetails.country =
+                            e.target.value;
+                        }}
                         style={{ paddingLeft: "15px" }}
                       />
                     </div>
@@ -124,7 +180,6 @@ const Checkout = () => {
                   <div className="row" style={{ marginTop: "15px" }}>
                     <div className="form-group">
                       <label
-                        for="inputCard"
                         className={styles.label}
                         style={{ marginBottom: "10px" }}
                       >
@@ -136,7 +191,15 @@ const Checkout = () => {
                         id="inputCard"
                         pattern="\d*"
                         placeholder="City"
-                        defaultValue={data.city}
+                        defaultValue={
+                          transactionDetails.shippingDetails
+                            ? transactionDetails.shippingDetails.city
+                            : ""
+                        }
+                        onChange={(e) => {
+                          transactionDetails.shippingDetails.city =
+                            e.target.value;
+                        }}
                         style={{ paddingLeft: "15px" }}
                       />
                     </div>
@@ -147,7 +210,6 @@ const Checkout = () => {
                   >
                     <div className="form-group col-md-6">
                       <label
-                        for="inputCard"
                         className={styles.label}
                         style={{ marginBottom: "10px" }}
                       >
@@ -158,13 +220,20 @@ const Checkout = () => {
                         className="form-control"
                         id="inputExpiryDate"
                         placeholder="State"
-                        defaultValue={data.state}
+                        defaultValue={
+                          transactionDetails.shippingDetails
+                            ? transactionDetails.shippingDetails.state
+                            : ""
+                        }
+                        onChange={(e) => {
+                          transactionDetails.shippingDetails.state =
+                            e.target.value;
+                        }}
                         style={{ paddingLeft: "15px" }}
                       />
                     </div>
                     <div className="form-group col-md-6">
                       <label
-                        for="inputCard"
                         className={styles.label}
                         style={{ marginBottom: "10px" }}
                       >
@@ -175,7 +244,15 @@ const Checkout = () => {
                         className="form-control"
                         id="inputCvv"
                         placeholder="Zip"
-                        defaultValue={data.zip_code}
+                        defaultValue={
+                          transactionDetails.shippingDetails
+                            ? transactionDetails.shippingDetails.zip
+                            : ""
+                        }
+                        onChange={(e) => {
+                          transactionDetails.shippingDetails.zip =
+                            e.target.value;
+                        }}
                         style={{ paddingLeft: "15px" }}
                       />
                     </div>
@@ -189,27 +266,27 @@ const Checkout = () => {
             style={{ backgroundColor: "white" }}
           >
             <div className={styles.summaryMainContainer}>
-              <h4 style={{ color: "#191818", marginBottom: "45px" }}>
-                Order Summary
-              </h4>
+              <h3 style={{ color: "#191818", marginBottom: "35px" }}>
+                <b>Order Summary</b>
+              </h3>
               <div
                 className={`${styles.summaryContainer} ${styles.summaryElements}`}
               >
                 <div className={styles.summaryChild}>
-                  <h6>Saprin Beach Resort</h6>
+                  <h6>Subtotal</h6>
                 </div>
                 <div>
-                  <h6>LKR 8,585</h6>
+                  <h6>{transactionDetails.subtotal} LKR</h6>
                 </div>
               </div>
               <div
                 className={`${styles.summaryContainer} ${styles.summaryElements}`}
               >
                 <div className={styles.summaryChild}>
-                  <h6>Service Charge</h6>
+                  <h6>Shipping Charge</h6>
                 </div>
                 <div>
-                  <h6>LKR 430</h6>
+                  <h6>{transactionDetails.shippingPrice} LKR</h6>
                 </div>
               </div>
               <hr
@@ -220,14 +297,16 @@ const Checkout = () => {
                 className={`${styles.summaryContainer} ${styles.summaryElements}`}
               >
                 <div className={styles.summaryChild}>
-                  <h6>Sub Total</h6>
+                  <h6>Total</h6>
                 </div>
                 <div>
-                  <h6>LKR 9,015</h6>
+                  <h6>{transactionDetails.total} LKR</h6>
                 </div>
               </div>
               <div className="text-center">
-                <button className={styles.payBtn}>Pay</button>
+                <button className={styles.payBtn} onClick={processPayment}>
+                  Pay
+                </button>
               </div>
             </div>
           </div>
