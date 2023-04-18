@@ -12,8 +12,11 @@ import SellerProfile from "./components/user/seller.profile";
 import ProductsList from "./components/product/products.list.js";
 import ProductSingle from "./components/product/products.single.js";
 
-
 import Cart from "./components/cart/cart.page";
+
+import AdminHome from "./components/admin/admin.home";
+
+import Checkout from "./components/payment/checkout.page";
 
 function App() {
   return (
@@ -30,6 +33,10 @@ function App() {
           <Route path="/products/:id" element={<ProductSingle />} />
 
           <Route path="/cart" element={<Cart />} />
+
+          <Route path="/admin" element={<AdminHome />} />
+
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </div>
     </Router>

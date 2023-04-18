@@ -2,6 +2,12 @@
     display: flex;
     margin-bottom: 20px;
   }
+
+  .cardBody {
+    border: none;
+    border-radius: 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
   
   .product img {
     width: 150px;
@@ -50,6 +56,11 @@
   object-fit: contain;
 }
 
+.cardSubText {
+  color: #3A3B3C;
+  opacity: 0.8;
+}
+
 .productTableHeader:last-child,
 .productTableCell:last-child {
   border-right: none;
@@ -94,4 +105,12 @@
     font-size: 0.9rem;
     color: blue;
     text-decoration: underline;
+  }
+
+  .label {
+      margin-left: 5px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #585555;
+      opacity: 0.9;
   }
