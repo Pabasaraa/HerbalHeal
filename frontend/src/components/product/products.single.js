@@ -18,7 +18,7 @@ const ProductSingle = () => {
   const [imageData, setImageData] = useState(null);
 
   const params = useParams();
-  
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -152,23 +152,24 @@ const ProductSingle = () => {
             <Card className={styles.productCard}>
               <Card.Body>
                 <div className={styles.cardPrice}>
-                  <Card.Title style={{ fontSize: "1rem" }}>
+                  <Card.Title style={{ fontSize: "1.1rem", color: "#6C757D" }}>
                     Selling price:
                   </Card.Title>
                   <Card.Title
                     style={{
-                      fontSize: "1.8rem",
+                      fontSize: "1.1rem",
                       fontWeight: "bold",
+                      color: "#6C757D",
                     }}
-                    className="text-success"
                   >
-                    {product.itemPrice}{" "}
-                    <span style={{ fontSize: "1.5rem" }}>LKR</span>
+                    {product.itemPrice} LKR
                   </Card.Title>
                 </div>
                 <div className={styles.cardTotal}>
                   <div>
-                    <Card.Title style={{ fontSize: "1rem" }}>
+                    <Card.Title
+                      style={{ fontSize: "1.2rem", color: "#6C757D" }}
+                    >
                       Total price:
                     </Card.Title>
                   </div>
@@ -186,7 +187,11 @@ const ProductSingle = () => {
                   </div>
                   <div className="text-end">
                     <Card.Title
-                      style={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                      style={{
+                        fontSize: "1.8rem",
+                        fontWeight: "bold",
+                      }}
+                      className="text-success"
                     >
                       {product.itemPrice * quantity} LKR
                     </Card.Title>

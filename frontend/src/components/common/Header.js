@@ -115,7 +115,7 @@ const Header = () => {
           <Button
             text="Log out"
             onClick={() => {
-              localStorage.removeItem("token");
+              localStorage.clear();
               setIsLoggedIn(false);
               navigate("/login");
             }}

@@ -8,18 +8,18 @@
   }
 
   .searchInput {
-    border: 1px solid #6C757D;
+    border: 2px solid rgba(108, 117, 125, 0.2) ;
   }
 
   .searchInput:focus {
-    border-color: black;
+    border: 2px solid rgba(108, 117, 125, 0.3) ;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     outline: 0 none;
   }
 
   .searchBtn {
     background-color: white;
-    border: 1px solid #6C757D;
+    border: 2px solid rgba(108, 117, 125, 0.2) ;
     color: #6C757D;
     padding: 8px 30px;
     border-radius: 10px;
@@ -30,7 +30,7 @@
 
   .searchBtn:hover {
     background-color: #212529;
-    border: 1px solid #212529;
+    border: 2px solid #212529;
     color: white;
     padding: 8px 30px;
     border-radius: 10px;
@@ -41,7 +41,7 @@
   
   .productGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     grid-gap: 30px;
   }
   
@@ -71,7 +71,7 @@
     border: 2px solid #6C757D;
     color: #6C757D;
     padding: 8px 12px;
-    margin-bottom: 10px;
+    margin-bottom: 0;
     border-radius: 10px;
     font-size: 1rem;
     cursor: pointer;
