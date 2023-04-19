@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 // Common components
@@ -11,6 +11,11 @@ import styles from "./styles/login.module.css";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const { search } = useLocation();
+
+  const previousLocation = new URLSearchParams(search).get("redirect");
+  const redirectTo = previousLocation ? previousLocation : "/profile";
 
   const validateToken = () => {
     if (!localStorage.getItem("token")) return;
@@ -48,7 +53,7 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event, location) => {
     event.preventDefault();
     const user = {
       username: username,
@@ -61,7 +66,7 @@ const Login = () => {
         alert("Login successful!");
 
         localStorage.setItem("token", response.data.data.token);
-        navigate("/profile");
+        navigate(redirectTo);
       })
       .catch((error) => {
         alert("Login failed, " + error.response.data.message);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Card, Form, Button, Badge } from "react-bootstrap";
 import Loader from "../common/Spinner";
@@ -10,6 +10,7 @@ const SellerProfile = () => {
   const [reviews, setReviews] = useState(null);
 
   const params = useParams();
+  const navigate = useNavigate();
 
   const seller_id = params.id;
 
@@ -39,10 +40,16 @@ const SellerProfile = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (!localStorage.getItem("token")) {
+      alert("Please login to write a review");
+      navigate(`/login?redirect=${window.location.pathname}`);
+      return;
+    }
+
     const review = {
       reviewTitle: event.target.reviewTitle.value,
       reviewBody: event.target.reviewBody.value,
-      postedOn: params.id,
+      postedOn: seller_id,
       token: localStorage.getItem("token"),
     };
 

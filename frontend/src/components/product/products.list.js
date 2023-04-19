@@ -97,7 +97,13 @@ const ProductsList = () => {
                     {product.itemName}
                   </Card.Title>
                   <Card.Text style={{ marginTop: "-10px" }}>
-                    <small className="text-muted">{product.username}</small>
+                    <Button
+                      variant="link"
+                      onClick={() => navigate(`/sellers/${product.userId}`)}
+                      style={{ padding: "0", textDecoration: "none" }}
+                    >
+                      <small className="text-muted">{product.username}</small>
+                    </Button>
                   </Card.Text>
                   <Card.Text
                     className={`

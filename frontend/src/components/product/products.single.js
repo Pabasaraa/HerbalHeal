@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-
-import { useDispatch } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-
-import { addToCart } from "../../redux/slices/cart.slice";
 
 import Loader from "../common/Spinner";
 
@@ -18,8 +14,7 @@ const ProductSingle = () => {
   const [imageData, setImageData] = useState(null);
 
   const params = useParams();
-
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -62,10 +57,10 @@ const ProductSingle = () => {
     }
   };
 
-  //chavi
   const handleAddToCart = () => {
     if (!localStorage.getItem("token")) {
       alert("Please login first to add to cart!");
+      navigate(`/login?redirect=${window.location.pathname}`);
       return;
     } else {
       const cart = localStorage.getItem("cartItems");
@@ -101,6 +96,7 @@ const ProductSingle = () => {
 
     if (!localStorage.getItem("token")) {
       alert("Please login first to submit a review!");
+      navigate(`/login?redirect=${window.location.pathname}`);
       return;
     }
 
@@ -136,9 +132,15 @@ const ProductSingle = () => {
           </div>
           <div className={`col-8 ${styles.productDetailSection}`}>
             <h2 style={{ marginBottom: "0" }}>{product.itemName}</h2>
-            <p className="mb-2 text-muted" style={{ fontSize: "0.9rem" }}>
-              By {product.username}
-            </p>
+            <Button
+              variant="link"
+              onClick={() => navigate(`/sellers/${product.userId}`)}
+              style={{ padding: "0", textDecoration: "none" }}
+            >
+              <p className="text-muted" style={{ fontSize: "0.9rem" }}>
+                By {product.username}
+              </p>
+            </Button>
             <div className="d-flex mb-3" style={{ fontSize: "0.8rem" }}>
               <i className="bi bi-chat-left-text-fill text-muted me-2"></i>
               <span className="text-muted">{reviews.length} Reviews</span>
