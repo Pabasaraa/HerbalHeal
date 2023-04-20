@@ -8,6 +8,7 @@ This is an online store where users can buy and sell Ayurvedic/Herbal medicines 
 ## Technologies Used
 
 - MERN stack (MongoDB, Express.js, React.js, Node.js)
+- Redux
 - Docker
 - Kubernetes
 
@@ -38,6 +39,6 @@ Note: You need to have both the backend and frontend running simultaneously for 
 
 ## Contributors
 
-- Withana W.A.S.P (IT20664312)
-- Navodi P.T (IT20639662)
-- Kulasekara D.C.V (IT20638368)
+- Withana W.A.S.P - IT20664312 (Pabasaraa)
+- Navodi P.T - IT20639662 (IT20639662)
+- Kulasekara D.C.V - IT20638368 (chavikulasekara)

@@ -105,7 +105,7 @@ const SellerProfile = () => {
                 />
               </Form.Group>
               <Button
-                variant="primary"
+                variant="success"
                 type="submit"
                 className="submit-btn mt-3"
               >
@@ -114,20 +114,33 @@ const SellerProfile = () => {
             </Form>
           </div>
           {reviews ? (
-            <div className={styles.payments}>
-              <h3 className="mb-4 mt-5">Reviews & Ratings</h3>
-              {reviews.map((review) => (
-                <Card className="mb-4" style={{ width: "100%" }}>
-                  <Card.Body>
-                    <Card.Title>{review.reviewTitle}</Card.Title>
-                    <Card.Subtitle className="mb-3 text-muted">
-                      <span style={{ fontSize: "0.9rem" }}>Posted By:</span>{" "}
-                      {review.postedBy}
-                    </Card.Subtitle>
-                    <Card.Body>{review.reviewBody}</Card.Body>
-                  </Card.Body>
-                </Card>
-              ))}
+            <div className="row mt-5" style={{ width: "80%" }}>
+              <div className="col">
+                <h3>Reviews ({reviews.length})</h3>
+                <hr className={styles.horizontalLine} />
+                <div className="container">
+                  {reviews.map((review, index) => (
+                    <Card
+                      key={index}
+                      className="mb-4"
+                      style={{ width: "100%" }}
+                    >
+                      <Card.Body>
+                        <Card.Title>{review.reviewTitle}</Card.Title>
+                        <Card.Subtitle className="mb-3 text-muted">
+                          <p>
+                            <span style={{ fontSize: "0.8rem" }}>
+                              Posted By: {review.postedBy}
+                            </span>{" "}
+                          </p>
+                        </Card.Subtitle>
+                        <hr className={styles.horizontalLine} />
+                        <Card.Body>{review.reviewBody}</Card.Body>
+                      </Card.Body>
+                    </Card>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : (
             <Loader />

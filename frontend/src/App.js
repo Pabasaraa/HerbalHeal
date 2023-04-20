@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 import Header from "./components/common/Header";
 
@@ -12,6 +13,12 @@ import ItemList from "./components/item/itemList";
 import UpdateItem from "./components/item/updateItem";
 
 
+
+import ProductsList from "./components/product/products.list.js";
+import ProductSingle from "./components/product/products.single.js";
+
+
+import Cart from "./components/cart/cart.page";
 
 function App() {
   return (

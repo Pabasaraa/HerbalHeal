@@ -102,8 +102,9 @@ const Header = () => {
         />
       </div>
       <div className="navbar-links-container">
+        {/* Change these to buttons and use navigate('/path') for navigation */}
         <a href="">Home</a>
-        <a href="">Items</a>
+        <a href="/products">Items</a>
         <a href="">Review</a>
         <a href="">Contact</a>
         <a href="">
