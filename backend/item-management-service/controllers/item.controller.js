@@ -5,7 +5,7 @@ import itemValidation from "../services/validation.service.js";
 
 const createItem = async (req, res) => {
   try {
-    // Check if the user has logged in if not throw an error
+    // Check if the user has logged in if not throw an err
     if (!req.body.token) {
       throw new Error("No token provided!");
     }
@@ -71,8 +71,10 @@ const getItems = async (req, res) => {
 };
 
 const getItemsByUserId = async (req, res) => {
+  const token = req.headers["x-access-token"];
+  let userId;
   try {
-    if (!req.body.token) {
+    if (!token) {
       throw new Error("No token provided!");
     }
 
@@ -82,16 +84,16 @@ const getItemsByUserId = async (req, res) => {
         {},
         {
           headers: {
-            "x-access-token": req.body.token,
+            "x-access-token": token,
           },
         }
       );
-      req.body.userId = response.data.data._id;
+      userId = response.data.data._id;
     } catch (error) {
       throw new Error("Error while getting the user ID: " + error);
     }
 
-    const items = await itemService.getItemsByUserId(req.body.userId);
+    const items = await itemService.getItemsByUserId(userId);
 
     res.status(200).json({
       status: "success",

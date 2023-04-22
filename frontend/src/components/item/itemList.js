@@ -12,25 +12,31 @@ class ItemList extends Component {
 
   componentDidMount() {
     console.log("runningg");
-    this.retrieveItems();
+    const token = localStorage.getItem("token");
+    this.retrieveItems(token);
   }
 
-  retrieveItems() {
-    axios.get("http://localhost:8000/items/get/all").then((res) => {
-      console.log(res.data.data);
-      if (res.data.data) {
-        this.setState({ items: res.data.data });
-      }
-    });
+  retrieveItems(token) {
+    axios
+      .get(`http://localhost:8000/items/user/get`, {
+        headers: {
+          "x-access-token": token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        if (res.data.data) {
+          this.setState({ items: res.data.data });
+        }
+      });
   }
 
   onDelete = (id) => {
-    axios
-      .delete(`http://localhost:8000/items//delete/:id/${id}`)
-      .then((res) => {
-        alert("Delete Successfully");
-        this.retrieveItems();
-      });
+    axios.delete(`http://localhost:8000/items/delete/:id/${id}`).then((res) => {
+      alert("Delete Successfully");
+      const userId = localStorage.getItem("userId");
+      this.retrieveItems(userId);
+    });
   };
 
   filterData(items, searchKey) {
@@ -95,7 +101,12 @@ class ItemList extends Component {
                   <td>{items.userId}</td>
                   <td>{items.username}</td>
                   <td>{items.itemName}</td>
-                  <td>{items.itemDescription}</td>
+                  <td>
+                    {" "}
+                    {items.itemDescription.length > 100
+                      ? items.itemDescription.slice(0, 100) + "..."
+                      : items.itemDescription}
+                  </td>
                   <td>{items.itemPrice}</td>
 
                   <td>
