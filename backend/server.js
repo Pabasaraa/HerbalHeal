@@ -9,7 +9,8 @@ import userRoutes from "./user-management-service/routes/user.route.js";
 import paymentRoutes from "./payment-management-service/routes/payment.route.js";
 import itemRoutes from "./item-management-service/routes/item.route.js";
 import reviewRoutes from "./review-management-service/routes/review.route.js";
-import orderRoutes from "./order-management-service/routes/order.route.js"
+import orderRoutes from "./order-management-service/routes/order.route.js";
+import deliveryRoutes from "./delivery-management-service/delivery.route.js"
 
 // Load environment variables from .env file to the process.env object
 dotenv.config();
@@ -27,6 +28,7 @@ app.use("/payments", paymentRoutes);
 app.use("/items", itemRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/orders", orderRoutes);
+app.use("/delivery", deliveryRoutes);
 
 
 
