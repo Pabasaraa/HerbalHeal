@@ -49,16 +49,18 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      const reviews = await axios.get(
-        `http://localhost:8000/reviews/${user._id}`
-      );
-      console.log(reviews.data.data);
-      setReviews(reviews.data.data);
-    };
-    setTimeout(() => {
-      fetchReviews();
-    }, 2000);
+    if (user) {
+      const fetchReviews = async () => {
+        const reviews = await axios.get(
+          `http://localhost:8000/reviews/${user._id}`
+        );
+        console.log(reviews.data.data);
+        setReviews(reviews.data.data);
+      };
+      setTimeout(() => {
+        fetchReviews();
+      }, 2000);
+    }
   }, [user]);
 
   const logout = () => {

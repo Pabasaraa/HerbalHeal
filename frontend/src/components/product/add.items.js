@@ -1,49 +1,80 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import styles from "./styles/addItem.module.css";
 
-const AddItem = () => {
-  const [formData, setFormData] = useState({
-    userId: "",
-    username: "",
-    itemName: "",
-    itemDescription: "",
-    itemPrice: "",
-  });
-  const [itemImages, setItemImages] = useState(null);
+const AddItems = () => {
+  const [itemData, setItemData] = useState({});
+  const [images, setImages] = useState([]);
+
+  const validateUser = async () => {
+    if (!localStorage.getItem("token")) {
+      alert("You must login first!");
+      navigate(`/login?redirect=${window.location.pathname}`);
+    } else {
+      const response = await axios.post(
+        "http://localhost:8000/users/validatetoken",
+        {},
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        }
+      );
+
+      if (response.data.data) {
+        setItemData({
+          ...itemData,
+          username: response.data.data.username,
+        });
+      }
+
+      if (response.data.data.role !== "seller") {
+        alert("You must be a seller to add items!");
+        navigate(`/products`);
+      }
+    }
+  };
+
+  useEffect(() => {
+    validateUser();
+  }, []);
 
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-    setItemImages(event.target.files[0])
-    
+    setItemData({ ...itemData, [name]: value });
+  };
+
+  const handleImageChange = (event) => {
+    setImages([...images, ...event.target.files]);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(itemData);
     const formData = new FormData();
-    formData.append('file', itemImages);
-    formData.append('fileName', itemImages.name);
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    };
+    formData.append("token", localStorage.getItem("token"));
+    formData.append("itemName", itemData.itemName);
+    formData.append("itemDescription", itemData.itemDescription);
+    formData.append("itemPrice", itemData.itemPrice);
+
+    for (let i = 0; i < images.length; i++) {
+      formData.append("images", images[i]);
+    }
+
     axios
-      .post("http://localhost:8000/items/new", formData, config)
+      .post("http://localhost:8000/items/new", formData)
       .then(() => {
         alert("Add item successful!");
-        navigate("/itemList");
+        navigate("/products");
       })
       .catch((err) => {
         alert("Add item failed, " + err.response.data.message);
       });
   };
-
-  
 
   return (
     <section>
@@ -61,23 +92,7 @@ const AddItem = () => {
               <div className="card-body p-5 text-center">
                 <form onSubmit={handleSubmit}>
                   <h2 className="mb-3">Add Item</h2>
-
                   <hr className="mb-4" style={{ opacity: "0.15" }} />
-
-
-                  <div className="form-outline mb-4">
-                    <input
-                      type="text"
-                      id="userId"
-                      className="form-control"
-                      placeholder="User ID"
-                      name="userId"
-                      value={formData.userId}
-                      onChange={handleInputChange}
-                      maxLength="10"
-                      required
-                    />
-                  </div>
 
                   <div className="form-outline mb-4">
                     <input
@@ -86,9 +101,10 @@ const AddItem = () => {
                       name="username"
                       className="form-control"
                       placeholder="Username"
-                      value={formData.username}
+                      value={itemData.username}
                       onChange={handleInputChange}
                       required
+                      disabled
                     />
                   </div>
 
@@ -99,7 +115,7 @@ const AddItem = () => {
                       className="form-control"
                       placeholder="Item Name"
                       name="itemName"
-                      value={formData.itemName}
+                      value={itemData.itemName}
                       onChange={handleInputChange}
                       required
                     />
@@ -112,7 +128,7 @@ const AddItem = () => {
                       className="form-control"
                       placeholder="Item Description"
                       name="itemDescription"
-                      value={formData.itemDescription}
+                      value={itemData.itemDescription}
                       onChange={handleInputChange}
                       required
                     />
@@ -125,7 +141,7 @@ const AddItem = () => {
                       className="form-control"
                       placeholder="Item Price"
                       name="itemPrice"
-                      value={formData.itemPrice}
+                      value={itemData.itemPrice}
                       onChange={handleInputChange}
                       required
                     />
@@ -138,25 +154,20 @@ const AddItem = () => {
                       className="form-control"
                       placeholder="Item Images"
                       name="itemImages"
-                      value={formData.itemImages}
-                      onChange={(e) => setItemImages(e.target.files[0])}
+                      onChange={handleImageChange}
                       required
                     />
                   </div>
 
-                 
-
                   <button
                     className={styles.btn_login}
                     style={{ marginTop: "15px", width: "fit-content" }}
-                    onClick={() => navigate("/itemList")}
                     type="submit"
                   >
                     Save
                   </button>
 
                   <hr className="my-4" style={{ opacity: "0.15" }} />
-
                 </form>
               </div>
             </div>
@@ -166,4 +177,4 @@ const AddItem = () => {
     </section>
   );
 };
-export default AddItem;
+export default AddItems;

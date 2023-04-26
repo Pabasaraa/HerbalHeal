@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { Component } from "react";
 
-class ItemList extends Component {
+class ListItems extends Component {
   constructor(props) {
     super(props);
 
@@ -11,12 +11,13 @@ class ItemList extends Component {
   }
 
   componentDidMount() {
-    console.log("runningg");
-    const token = localStorage.getItem("token");
-    this.retrieveItems(token);
+    console.log("running");
+    this.retrieveItems();
   }
 
-  retrieveItems(token) {
+  retrieveItems() {
+    const token = localStorage.getItem("token");
+
     axios
       .get(`http://localhost:8000/items/user/get`, {
         headers: {
@@ -32,10 +33,9 @@ class ItemList extends Component {
   }
 
   onDelete = (id) => {
-    axios.delete(`http://localhost:8000/items/delete/:id/${id}`).then((res) => {
+    axios.delete(`http://localhost:8000/items/delete/${id}`).then(() => {
       alert("Delete Successfully");
-      const userId = localStorage.getItem("userId");
-      this.retrieveItems(userId);
+      this.retrieveItems();
     });
   };
 
@@ -112,14 +112,13 @@ class ItemList extends Component {
                   <td>
                     <a
                       className="btn btn-warning"
-                      href={`/updateAdmin/${items._id}`}
+                      href={`/dashboard/${items._id}`}
                     >
                       <i className="fas fa-edit"></i>&nbsp; Edit
                     </a>
                     &nbsp;
                     <a
                       className="btn btn-danger"
-                      href="#"
                       onClick={() => this.onDelete(items._id)}
                     >
                       <i className="far fa-trash-alt"></i>&nbsp; Delete
@@ -134,4 +133,4 @@ class ItemList extends Component {
   }
 }
 
-export default ItemList;
+export default ListItems;
