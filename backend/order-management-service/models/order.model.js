@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
+  customerId: {
+    type: String,
+    required: true,
+  },
   customerName: {
     type: String,
     required: true,
@@ -10,12 +14,20 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   orderedItems: {
-    type: [String],
+    type: [Object],
     required: true,
   },
-  verified: {
-    type: Boolean,
-    default: false,
+  totalPrice: {
+    type: Number,
+    required: true,
+  },
+  shippingOption: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    default: "Processing",
   },
 });
 

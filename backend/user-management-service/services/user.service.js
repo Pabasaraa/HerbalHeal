@@ -2,9 +2,7 @@ import userModel from "../models/user.model.js";
 
 async function createUser(user) {
   try {
-    console.log(user);
     const newUser = new userModel(user);
-    console.log(newUser);
     return await newUser.save();
   } catch (error) {
     throw new Error("Error while creating user: " + error);

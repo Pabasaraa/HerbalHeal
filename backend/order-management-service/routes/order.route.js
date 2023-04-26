@@ -3,11 +3,12 @@ import orderController from "../controllers/order.controller.js";
 
 const router = express.Router();
 
-router.post("/orders", orderController.createOrder);
+router.post("/orders/new", orderController.createOrder);
 router.get("/orders", orderController.getAllOrders);
-router.get("/orders/:orderId", orderController.getOrderById);
-router.put("/orders/:orderId", orderController.updateOrder);
-router.delete("/orders/:orderId", orderController.deleteOrder);
-router.patch("/orders/:orderId/verify", orderController.verifyOrder);
+router.get("/orders/:id", orderController.getOrderById);
+router.get("/orders/user/:id", orderController.getOrdersByUserId);
+router.put("/orders/:id", orderController.updateOrder);
+router.delete("/orders/:id", orderController.deleteOrder);
+router.patch("/orders/:id/verify", orderController.verifyOrder);
 
 export default router;

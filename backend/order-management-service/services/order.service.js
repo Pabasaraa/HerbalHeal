@@ -6,7 +6,7 @@ const createOrder = async (order) => {
     const savedOrder = await newOrder.save();
     return savedOrder;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error("Error while placinge the order, " + error.message);
   }
 };
 
@@ -15,7 +15,7 @@ const getAllOrders = async () => {
     const orders = await orderModel.find();
     return orders;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error("Error while getting all orders, " + error.message);
   }
 };
 
@@ -24,7 +24,18 @@ const getOrderById = async (orderId) => {
     const order = await orderModel.findById(orderId);
     return order;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error("Error while getting the order by ID, " + error.message);
+  }
+};
+
+const getOrdersByUserId = async (userId) => {
+  try {
+    const orders = await orderModel.find({ userId: userId });
+    return orders;
+  } catch (error) {
+    throw new Error(
+      "Error while getting the orders by user ID, " + error.message
+    );
   }
 };
 
@@ -67,6 +78,7 @@ export default {
   createOrder,
   getAllOrders,
   getOrderById,
+  getOrdersByUserId,
   updateOrder,
   deleteOrder,
   verifyOrder,
