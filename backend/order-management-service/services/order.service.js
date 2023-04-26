@@ -1,11 +1,8 @@
-const axios = require('axios');
-const Order = require('../models/orderModel');
+import orderModel from "../models/order.model.js";
 
-const ordersUrl = 'http://localhost:8000/orders-service';
-
-exports.createOrder = async (order) => {
+const createOrder = async (order) => {
   try {
-    const newOrder = new Order(order);
+    const newOrder = new orderModel(order);
     const savedOrder = await newOrder.save();
     return savedOrder;
   } catch (error) {
@@ -13,27 +10,27 @@ exports.createOrder = async (order) => {
   }
 };
 
-exports.getAllOrders = async () => {
+const getAllOrders = async () => {
   try {
-    const orders = await Order.find();
+    const orders = await orderModel.find();
     return orders;
   } catch (error) {
     throw new Error(error.message);
   }
 };
 
-exports.getOrderById = async (orderId) => {
+const getOrderById = async (orderId) => {
   try {
-    const order = await Order.findById(orderId);
+    const order = await orderModel.findById(orderId);
     return order;
   } catch (error) {
     throw new Error(error.message);
   }
 };
 
-exports.updateOrder = async (orderId, updates) => {
+const updateOrder = async (orderId, updates) => {
   try {
-    const updatedOrder = await Order.findByIdAndUpdate(orderId, updates, {
+    const updatedOrder = await orderModel.findByIdAndUpdate(orderId, updates, {
       new: true,
     });
     return updatedOrder;
@@ -42,26 +39,35 @@ exports.updateOrder = async (orderId, updates) => {
   }
 };
 
-exports.deleteOrder = async (orderId) => {
+const deleteOrder = async (orderId) => {
   try {
-    const deletedOrder = await Order.findByIdAndDelete(orderId);
+    const deletedOrder = await orderModel.findByIdAndDelete(orderId);
     return deletedOrder;
   } catch (error) {
     throw new Error(error.message);
   }
 };
 
-exports.verifyOrder = async (orderId) => {
+const verifyOrder = async (orderId) => {
   try {
-    const order = await Order.findById(orderId);
+    const order = await orderModel.findById(orderId);
     if (order) {
       order.verified = true;
       const updatedOrder = await order.save();
       return updatedOrder;
     } else {
-      throw new Error('Order not found');
+      throw new Error("Order not found");
     }
   } catch (error) {
     throw new Error(error.message);
   }
+};
+
+export default {
+  createOrder,
+  getAllOrders,
+  getOrderById,
+  updateOrder,
+  deleteOrder,
+  verifyOrder,
 };

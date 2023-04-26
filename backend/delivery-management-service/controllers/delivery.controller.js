@@ -1,4 +1,4 @@
-const DeliveryService = require("../services/DeliveryService");
+import DeliveryService from "../services/delivery.service.js";
 
 class DeliveryController {
   static async createOrder(req, res, next) {
@@ -28,7 +28,10 @@ class DeliveryController {
     try {
       const { trackingId } = req.params;
       const { status } = req.body;
-      const delivery = await DeliveryService.updateOrderStatus(trackingId, status);
+      const delivery = await DeliveryService.updateOrderStatus(
+        trackingId,
+        status
+      );
       if (!delivery) {
         return res.status(404).json({ message: "Delivery not found" });
       }
@@ -39,4 +42,4 @@ class DeliveryController {
   }
 }
 
-module.exports = DeliveryController;
+export default DeliveryController;

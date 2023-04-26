@@ -1,9 +1,10 @@
-const express = require("express");
+import express from "express";
+import DeliveryController from "../controllers/delivery.controller.js";
+
 const router = express.Router();
-const DeliveryController = require("../controllers/delivery");
 
 router.post("/orders", DeliveryController.createOrder);
 router.get("/orders/:trackingId", DeliveryController.getOrderByTrackingId);
 router.put("/orders/:trackingId", DeliveryController.updateOrderStatus);
 
-module.exports = router;
+export default router;
