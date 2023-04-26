@@ -32,6 +32,8 @@ import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [open, setOpen] = useState(false);
+  const Menus = ["Profile", "LogOut"]
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -128,7 +130,29 @@ const Header = () => {
             }}
           />
         )}
+     
+        <img 
+        onClick={() => setOpen(!open)}
+        
+        src='../profile_icon.png' alt='' className="img2" />
+
+        {open && (
+          <div className="sub-menu" >
+          <ul>
+            {Menus.map((menu, icon) =>(
+              <li
+              onClick={() => setOpen(false)}
+              key = {menu}>{menu}</li>
+            ))}
+          </ul>
+
       </div>
+       ) }
+   
+    
+      </div>
+
+     
       <div className="navbar-menu-container">
         <HiOutlineBars3 onClick={() => setOpenMenu(true)} />
       </div>
@@ -152,7 +176,10 @@ const Header = () => {
           <Divider />
         </Box>
       </Drawer>
+    
+
     </nav>
+    
   );
 };
 

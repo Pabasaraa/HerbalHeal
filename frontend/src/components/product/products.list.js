@@ -48,6 +48,19 @@ const ProductsList = () => {
     setSearchTerm(e.target.value);
   };
 
+  const searchProducts = () => {
+    axios
+      .post("http://localhost:8000/items/search", {
+        searchTerm: searchTerm,
+      })
+      .then((res) => {
+        setProducts(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   return (
     <div>
       <div className={styles.container}>
@@ -60,7 +73,11 @@ const ProductsList = () => {
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          <Button variant="outline-secondary" className={styles.searchBtn}>
+          <Button
+            variant="outline-secondary"
+            className={styles.searchBtn}
+            onClick={searchProducts}
+          >
             Search
           </Button>
         </InputGroup>
@@ -76,11 +93,17 @@ const ProductsList = () => {
                   className={styles.productIms}
                 />
                 <Card.Body>
-                  <Card.Title style={{ fontSize: "1.3rem" }}>
-                    <b>{product.itemName}</b>
+                  <Card.Title style={{ fontSize: "1.1rem" }}>
+                    {product.itemName}
                   </Card.Title>
                   <Card.Text style={{ marginTop: "-10px" }}>
-                    <small className="text-muted">{product.username}</small>
+                    <Button
+                      variant="link"
+                      onClick={() => navigate(`/sellers/${product.userId}`)}
+                      style={{ padding: "0", textDecoration: "none" }}
+                    >
+                      <small className="text-muted">{product.username}</small>
+                    </Button>
                   </Card.Text>
                   <Card.Text
                     className={`
