@@ -20,8 +20,8 @@ const createOrder = async (req, res) => {
         }
       );
 
-      req.body.userId = response.data.data._id;
-      req.body.username = response.data.data.username;
+      req.body.customerId = response.data.data._id;
+      req.body.customerName = response.data.data.username;
     } catch (error) {
       throw new Error("Error while getting the user ID: " + error);
     }
