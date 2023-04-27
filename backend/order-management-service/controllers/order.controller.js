@@ -1,4 +1,5 @@
 import axios from "axios";
+import nodemailer from "nodemailer";
 import orderService from "../services/order.service.js";
 
 const createOrder = async (req, res) => {
@@ -27,6 +28,37 @@ const createOrder = async (req, res) => {
     }
 
     const newOrder = await orderService.createOrder(req.body);
+
+    if (newOrder) {
+      // send payment confirmation email
+      const transporter = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+          user: "official.herbalheal@gmail.com",
+          pass: "znolucqomuumgpzu",
+        },
+      });
+
+      const mailOptions = {
+        from: "HerbalHeal co. official.herbalheal@gmail.com",
+        to: "pabasara.was@gmail.com",
+        subject: "Payment Confirmation",
+        html: `
+          <p>Dear User,</p>
+          <p>Thank you for your payment of $${10000}. This email is to confirm that your payment has been received and processed.</p>
+          <p>Thank you for choosing our service.</p>
+          <p>Best regards,</p>
+          <p>Your Name</p>
+        `,
+      };
+
+      try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`Email sent: ${info.response}`);
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     res.status(200).json({
       status: "success",
