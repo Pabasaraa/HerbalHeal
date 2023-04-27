@@ -8,10 +8,15 @@ import styles from "./styles/profile.module.css";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState(null);
   const [reviews, setReviews] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("validating token");
+    ValidateToken(getUser);
+  }, []);
 
   function ValidateToken(callback) {
     if (!localStorage.getItem("token")) {
@@ -43,22 +48,30 @@ const Profile = () => {
     setUser(user.data);
   };
 
-  useEffect(() => {
-    console.log("validating token");
-    ValidateToken(getUser);
-  }, []);
+  const fetchReviews = async () => {
+    const reviews = await axios.get(
+      `http://localhost:8000/reviews/${user._id}`
+    );
+    console.log(reviews.data.data);
+    setReviews(reviews.data.data);
+  };
+
+  const fetchOrders = async () => {
+    const allOrders = await axios.get(
+      `http://localhost:8000/orders/user/${user._id}`
+    );
+
+    console.log(allOrders.data.data);
+    setOrders(allOrders.data.data);
+  };
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      const reviews = await axios.get(
-        `http://localhost:8000/reviews/${user._id}`
-      );
-      console.log(reviews.data.data);
-      setReviews(reviews.data.data);
-    };
-    setTimeout(() => {
-      fetchReviews();
-    }, 2000);
+    if (user) {
+      setTimeout(() => {
+        fetchReviews();
+        fetchOrders();
+      }, 2000);
+    }
   }, [user]);
 
   const logout = () => {
@@ -177,36 +190,51 @@ const Profile = () => {
             </div>
           ) : (
             <div className={styles.orders}>
-              {orders.length === 0 ? (
-                <Card.Title className="mt-5 mb-2">
-                  You have no orders yet..{" "}
-                  <button
-                    className={styles.clickableText}
-                    onClick={() => navigate("/products")}
-                  >
-                    Shop now
-                  </button>
-                </Card.Title>
+              {!orders ? (
+                <Loader />
               ) : (
-                <div className={styles.payments}>
-                  <h3 className="mb-4 mt-5">Your Orders</h3>
-                  <Card>
-                    <Card.Body>
-                      <Card.Title>Order #1</Card.Title>
-                      <Card.Subtitle className="mb-2 text-muted">
-                        01/01/2022
-                      </Card.Subtitle>
-                      <Card.Text>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Maecenas vel mi elit. Ut malesuada, tortor at dictum
-                        semper, quam sapien accumsan urna, vitae bibendum ante
-                        nisl sit amet turpis.
-                      </Card.Text>
-                      <Badge variant="primary" className={styles.status}>
-                        Pending
-                      </Badge>
-                    </Card.Body>
-                  </Card>
+                <div>
+                  {orders && orders.length === 0 ? (
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <Card.Title className="mt-5 mb-2">
+                        You have no orders yet..{" "}
+                        <button
+                          className={styles.clickableText}
+                          onClick={() => navigate("/products")}
+                        >
+                          Shop now
+                        </button>
+                      </Card.Title>
+                    </div>
+                  ) : (
+                    <div className={styles.payments}>
+                      <h3 className="mb-4 mt-3">Your Orders</h3>
+                      {orders.map((order, index) => (
+                        <Card className="mb-5" style={{ width: "100%" }}>
+                          <Card.Body>
+                            <Card.Title className="mb-4">
+                              Order #{index + 1}
+                            </Card.Title>
+                            <Card.Text>
+                              {order.orderedItems.map((product, index) => (
+                                <div key={index} className={styles.row}>
+                                  <p style={{ width: "500px" }}>
+                                    {product.itemName}
+                                  </p>
+                                  <p>Qty: {product.itemQuantity}</p>
+                                  <p>Price: ${product.itemPrice}</p>
+                                </div>
+                              ))}
+                              <hr />
+                            </Card.Text>
+                            <Badge variant="primary" className={styles.status}>
+                              {order.status}
+                            </Badge>
+                          </Card.Body>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

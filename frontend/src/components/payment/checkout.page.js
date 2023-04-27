@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -6,7 +7,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles/checkout.module.css";
 
 const Checkout = () => {
-  const [data, setData] = useState([]);
   const [transactionDetails, setTransactionDetails] = useState({});
   const [paymentDetails] = useState({});
 
@@ -20,7 +20,9 @@ const Checkout = () => {
     retrieveData();
   }, []);
 
-  const processPayment = () => {
+  const navigate = useNavigate();
+
+  const processPayment = async () => {
     console.log("processing Payment");
 
     const paymentData = {
@@ -31,7 +33,31 @@ const Checkout = () => {
       billingAddress: transactionDetails.shippingDetails,
     };
 
+    const cartItems = JSON.parse(localStorage.getItem("cartItems"));
+
     console.log(paymentData);
+    const customerAddress =
+      transactionDetails.shippingMethod === "home_delivery"
+        ? transactionDetails.shippingDetails
+        : "No Address";
+
+    const orderData = {
+      token: localStorage.getItem("token"),
+      customerAddress: customerAddress,
+      orderedItems: cartItems,
+      totalPrice: transactionDetails.totalPrice,
+      shippingOption: transactionDetails.shippingOption,
+    };
+
+    await axios.post("http://localhost:8000/orders/new", orderData).then(() => {
+      localStorage.removeItem("cartItems");
+      localStorage.removeItem("transactionDetails");
+
+      //TODO: Add an alert to show the user that the order has been placed successfully and send an email to the user
+
+      alert("Order Placed Successfully");
+      navigate("/products");
+    });
   };
 
   return (

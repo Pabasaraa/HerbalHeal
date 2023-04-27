@@ -60,6 +60,7 @@ const Cart = () => {
       subtotal,
       shippingPrice,
       total,
+      shippingMethod,
     };
 
     if (!localStorage.getItem("token")) {
