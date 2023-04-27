@@ -73,27 +73,7 @@ const getOrderById = async (req, res) => {
 
 const getOrdersByUserId = async (req, res) => {
   try {
-    // Check if the user has logged in if not throw an err
-    if (!req.body.token) {
-      throw new Error("No token provided!");
-    }
-
-    // Get the user ID from the token and add it to the request body
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/users/validatetoken",
-        {},
-        {
-          headers: {
-            "x-access-token": req.body.token,
-          },
-        }
-      );
-
-      var userId = response.data.data._id;
-    } catch (error) {
-      throw new Error("Error while getting the user ID: " + error);
-    }
+    const userId = req.params.userId;
 
     const orders = await orderService.getOrdersByUserId(userId);
 
