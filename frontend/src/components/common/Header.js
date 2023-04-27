@@ -32,6 +32,8 @@ import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [open, setOpen] = useState(false);
+  const Menus = ["Profile", "LogOut"];
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -88,7 +90,13 @@ const Header = () => {
     },
   ];
   return (
-    <nav style={{ height: "auto" }}>
+    <nav
+      style={{
+        height: "auto",
+        padding: "0 60px",
+        boxShadow: "rgba(99, 99, 99, 0.1) 0px 1px 10px 0px",
+      }}
+    >
       <div className="nav-logo-container">
         <img
           src={Logo}
@@ -112,14 +120,35 @@ const Header = () => {
         </a>
 
         {isLoggedIn ? (
-          <Button
-            text="Log out"
-            onClick={() => {
-              localStorage.clear();
-              setIsLoggedIn(false);
-              navigate("/login");
-            }}
-          />
+          <>
+            <Button
+              text="Log out"
+              onClick={() => {
+                localStorage.clear();
+                setIsLoggedIn(false);
+                navigate("/login");
+              }}
+            />
+
+            <img
+              onClick={() => setOpen(!open)}
+              src="../profile_icon.png"
+              alt=""
+              className="img2"
+            />
+
+            {open && (
+              <div className="sub-menu">
+                <ul>
+                  {Menus.map((menu, icon) => (
+                    <li onClick={() => setOpen(false)} key={menu}>
+                      {menu}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
         ) : (
           <Button
             text="Sign up"
@@ -129,6 +158,7 @@ const Header = () => {
           />
         )}
       </div>
+
       <div className="navbar-menu-container">
         <HiOutlineBars3 onClick={() => setOpenMenu(true)} />
       </div>

@@ -63,7 +63,7 @@ const ProductsList = () => {
 
   return (
     <div>
-      <div className={styles.container}>
+      <div className={styles.container} style={{ padding: "0 60px" }}>
         <InputGroup className={styles.searchBar}>
           <FormControl
             className={styles.searchInput}
