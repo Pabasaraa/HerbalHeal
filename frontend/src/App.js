@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 import Header from "./components/common/Header";
+import Home from "./components/home/home";
 
 import Login from "./components/user/user.login";
 import Register from "./components/user/user.register";
@@ -26,7 +27,10 @@ function App() {
     <Router>
       <div className="App">
         <Header />
+       
         <Routes>
+          <Route path="/" element={<Home />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
