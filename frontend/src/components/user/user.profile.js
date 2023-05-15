@@ -154,7 +154,7 @@ const Profile = () => {
             </Card.Body>
           </Card>
           {user.role === "seller" ? (
-            <div>
+            <div style={{ width: "60%" }}>
               {reviews ? (
                 <div className="row mt-5" style={{ width: "100%" }}>
                   <div className="col">

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import "font-awesome/css/font-awesome.min.css";
 
 import Header from "./components/common/Header";
 import Home from "./components/home/home";
@@ -27,7 +28,7 @@ function App() {
     <Router>
       <div className="App">
         <Header />
-       
+
         <Routes>
           <Route path="/" element={<Home />} />
 
