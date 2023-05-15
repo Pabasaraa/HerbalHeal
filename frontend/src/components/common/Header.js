@@ -46,7 +46,7 @@ function NavBar() {
     <nav
       className="navbar navbar-expand-lg navbar-light bg-light"
       style={{
-        padding: "0.5rem 3rem",
+        padding: "0.8rem 3rem",
         boxShadow: "0 0 10px rgba(0,0,0,0.1)",
       }}
     >
