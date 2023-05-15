@@ -1,39 +1,13 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { Dropdown } from "react-bootstrap";
 
-import "./styles/Header.css";
+import logo from "../../Assets/Logo.png";
 
-import Button from "./Button";
-
-// Assets
-import Logo from "../../Assets/Logo.png";
-
-// React Icons
-import { BsCart2 } from "react-icons/bs";
-import { HiOutlineBars3 } from "react-icons/hi2";
-
-// Material UI
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import HomeIcon from "@mui/icons-material/Home";
-import InfoIcon from "@mui/icons-material/Info";
-import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
-import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
-import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
-
-const Header = () => {
-  const [openMenu, setOpenMenu] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [open, setOpen] = useState(false);
-  const Menus = ["Profile", "LogOut"];
+function NavBar() {
+  const [isLoggedin, setIsLoggedin] = useState(false);
+  const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -41,7 +15,7 @@ const Header = () => {
   useEffect(() => {
     const checkLoginStatus = () => {
       if (!localStorage.getItem("token")) {
-        setIsLoggedIn(false);
+        setIsLoggedin(false);
         return;
       }
 
@@ -55,135 +29,155 @@ const Header = () => {
             },
           }
         )
-        .then(() => {
-          setIsLoggedIn(true);
+        .then((res) => {
+          setIsLoggedin(true);
+          setUser(res.data.data);
         })
         .catch((error) => {
           console.log(error);
-          setIsLoggedIn(false);
+          setIsLoggedin(false);
         });
     };
 
     checkLoginStatus();
   }, [token]);
 
-  const menuOptions = [
-    {
-      text: "Home",
-      icon: <HomeIcon />,
-    },
-    {
-      text: "Items",
-      icon: <InfoIcon />,
-    },
-    {
-      text: "Review",
-      icon: <CommentRoundedIcon />,
-    },
-    {
-      text: "Contact",
-      icon: <PhoneRoundedIcon />,
-    },
-    {
-      text: "Cart",
-      icon: <ShoppingCartRoundedIcon />,
-    },
-  ];
   return (
     <nav
+      className="navbar navbar-expand-lg navbar-light bg-light"
       style={{
-        height: "auto",
-        padding: "0 60px",
-        boxShadow: "rgba(99, 99, 99, 0.1) 0px 1px 10px 0px",
+        padding: "0.5rem 3rem",
+        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
       }}
     >
-      <div className="nav-logo-container">
-        <img
-          src={Logo}
-          alt=""
-          onClick={() => {
-            navigate("/");
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.cursor = "pointer";
-          }}
-        />
+      <div className="container-fluid">
+        <div id="navbarSupportedContent">
+          <Link className="navbar-brand mt-2 mt-lg-0" to={"/"}>
+            <img src={logo} height="50" alt="MDB Logo" loading="lazy" />
+          </Link>
+        </div>
+
+        <div>
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to={"/"}
+                style={{ fontSize: "1.05rem", fontWeight: "500" }}
+              >
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to={"/products"}
+                style={{ fontSize: "1.05rem", fontWeight: "500" }}
+              >
+                Products
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to={"#"}
+                style={{ fontSize: "1.05rem", fontWeight: "500" }}
+              >
+                Review
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to={"#"}
+                style={{ fontSize: "1.05rem", fontWeight: "500" }}
+              >
+                Contact Us
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to={"#"}
+                style={{ fontSize: "1.05rem", fontWeight: "500" }}
+              >
+                About Us
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className="d-flex align-items-center">
+          {isLoggedin ? (
+            <div className="d-flex align-items-center">
+              <Link
+                className="text-reset me-3"
+                style={{ paddingLeft: "15px", margin: "0px" }}
+                to={"/cart"}
+              >
+                <i className="fa fa-shopping-cart"></i>
+              </Link>
+              <Dropdown>
+                <Dropdown.Toggle variant="link" id="navbarDropdownMenuAvatar">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/149/149071.png?w=826&t=st=1683198458~exp=1683199058~hmac=c430349ec56b0918e8c14689b3cea601b7df3233a082703ca736e8758edfd22d"
+                    className="rounded-circle"
+                    height="25"
+                    alt="Black and White Portrait of a Man"
+                    loading="lazy"
+                  />
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="dropdown-menu-end">
+                  {user && user.role === "seller" ? (
+                    <Dropdown.Item>
+                      <Link className="nav-link" to={"/profile"}>
+                        Seller Dashboard
+                      </Link>
+                    </Dropdown.Item>
+                  ) : null}
+                  <Dropdown.Item>
+                    <Link className="nav-link" to={"/profile"}>
+                      My profile
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      localStorage.clear();
+                      setIsLoggedin(false);
+                      setUser(null);
+                      navigate("/login");
+                    }}
+                  >
+                    <button
+                      className={`btn btn-link `}
+                      style={{
+                        margin: "0px",
+                        padding: "0px",
+                        textDecoration: "none",
+                        color: "black",
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          ) : (
+            <div className="d-flex align-items-center">
+              <button
+                type="button"
+                className="btn btn-link px-3 me-2"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="navbar-links-container">
-        {/* Change these to buttons and use navigate('/path') for navigation */}
-        <a href="">Home</a>
-        <a href="/products">Items</a>
-        <a href="">Review</a>
-        <a href="">Contact</a>
-        <a href="/cart">
-          <BsCart2 className="navbar-cart-icon" />
-        </a>
-
-        {isLoggedIn ? (
-          <>
-            <Button
-              text="Log out"
-              onClick={() => {
-                localStorage.clear();
-                setIsLoggedIn(false);
-                navigate("/login");
-              }}
-            />
-
-            <img
-              onClick={() => setOpen(!open)}
-              src="../profile_icon.png"
-              alt=""
-              className="img2"
-            />
-
-            {open && (
-              <div className="sub-menu">
-                <ul>
-                  {Menus.map((menu, icon) => (
-                    <li onClick={() => setOpen(false)} key={menu}>
-                      {menu}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </>
-        ) : (
-          <Button
-            text="Sign up"
-            onClick={() => {
-              navigate("/register");
-            }}
-          />
-        )}
-      </div>
-
-      <div className="navbar-menu-container">
-        <HiOutlineBars3 onClick={() => setOpenMenu(true)} />
-      </div>
-      <Drawer open={openMenu} onClose={() => setOpenMenu(false)} anchor="right">
-        <Box
-          sx={{ width: 250 }}
-          role="presentation"
-          onClick={() => setOpenMenu(false)}
-          onKeyDown={() => setOpenMenu(false)}
-        >
-          <List>
-            {menuOptions.map((item) => (
-              <ListItem key={item.text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-        </Box>
-      </Drawer>
     </nav>
   );
-};
+}
 
-export default Header;
+export default NavBar;

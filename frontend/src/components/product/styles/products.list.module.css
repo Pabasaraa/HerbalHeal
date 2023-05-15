@@ -41,22 +41,29 @@
 
 .productGrid {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-gap: 20px;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 30px;
 }
 
 .productCard {
-  height: 100%;
+  cursor: pointer;
   border-radius: 15px;
+  box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+  border: 1px solid rgba(220, 220, 220, 0.6);
+}
+
+.productCard:hover {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border: none;
+  transform: translate(0, -5px);
+  scale: 1.01;
+  transition: all 0.3s ease-in-out;
 }
 
 .productIms{
   width: 100%;
-  height: auto;
-  max-height: 300px;
-  object-fit: cover;
+  height: 200px;
+  padding-top: 15px;
+  object-fit: scale-down;
   overflow: hidden;
 }
 
