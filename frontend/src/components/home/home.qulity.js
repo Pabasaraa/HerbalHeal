@@ -7,7 +7,7 @@ import styles from "./styles/qulity.module.css";
 const Qulity = () => {
   return (
     <>
-      <section className={styles.qulity_box}>
+      <section className={styles.qulity_box} style={{ marginTop: "5rem" }}>
         <div className={styles.container}>
           <h1>
             {" "}

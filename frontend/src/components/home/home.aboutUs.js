@@ -7,11 +7,10 @@ const AboutUs = () => {
     <>
       <section className={styles.team_background}>
         <div className={styles.container}>
-          <di className={styles.above}>
+          <div className={styles.above} style={{ marginBottom: "2rem" }}>
             <h1>What they say about us</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, .</p>
-          </di>
-          <div className={styles.grid4}>
+          </div>
+          <div className={styles.grid4} style={{ marginBottom: "3rem" }}>
             {team.map((val, index) => (
               <div className={styles.box} key={index}>
                 <div className={styles.details}>
