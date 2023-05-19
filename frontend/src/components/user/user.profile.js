@@ -154,40 +154,106 @@ const Profile = () => {
             </Card.Body>
           </Card>
           {user.role === "seller" ? (
-            <div style={{ width: "60%" }}>
-              {reviews ? (
-                <div className="row mt-5" style={{ width: "100%" }}>
-                  <div className="col">
-                    <h3>Reviews ({reviews.length})</h3>
-                    <hr className={styles.horizontalLine} />
-                    <div className="container">
-                      {reviews.map((review, index) => (
-                        <Card
-                          key={index}
-                          className="mb-4"
-                          style={{ width: "100%" }}
-                        >
-                          <Card.Body>
-                            <Card.Title>{review.reviewTitle}</Card.Title>
-                            <Card.Subtitle className="mb-3 text-muted">
-                              <p>
-                                <span style={{ fontSize: "0.8rem" }}>
-                                  Posted By: {review.postedBy}
-                                </span>{" "}
-                              </p>
-                            </Card.Subtitle>
-                            <hr className={styles.horizontalLine} />
-                            <Card.Body>{review.reviewBody}</Card.Body>
-                          </Card.Body>
-                        </Card>
-                      ))}
+            <>
+              <div style={{ width: "60%" }}>
+                {reviews ? (
+                  <div className="row mt-5" style={{ width: "100%" }}>
+                    <div className="col">
+                      <h3>Reviews ({reviews.length})</h3>
+                      <hr className={styles.horizontalLine} />
+                      <div className="container">
+                        {reviews.map((review, index) => (
+                          <Card
+                            key={index}
+                            className="mb-4"
+                            style={{ width: "100%" }}
+                          >
+                            <Card.Body>
+                              <Card.Title>{review.reviewTitle}</Card.Title>
+                              <Card.Subtitle className="mb-3 text-muted">
+                                <p>
+                                  <span style={{ fontSize: "0.8rem" }}>
+                                    Posted By: {review.postedBy}
+                                  </span>{" "}
+                                </p>
+                              </Card.Subtitle>
+                              <hr className={styles.horizontalLine} />
+                              <Card.Body>{review.reviewBody}</Card.Body>
+                            </Card.Body>
+                          </Card>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <Loader />
-              )}
-            </div>
+                ) : (
+                  <Loader />
+                )}
+              </div>
+              <div style={{ width: "60%" }}>
+                {!orders ? (
+                  <Loader />
+                ) : (
+                  <div>
+                    {orders && orders.length === 0 ? (
+                      <div
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <Card.Title className="mt-5 mb-2">
+                          You have no orders yet..{" "}
+                          <button
+                            className={styles.clickableText}
+                            onClick={() => navigate("/products")}
+                          >
+                            Shop now
+                          </button>
+                        </Card.Title>
+                      </div>
+                    ) : (
+                      <div>
+                        <h3 className="mb-4 mt-3">Your Orders</h3>
+                        <hr className={styles.horizontalLine} />
+                        {orders.map((order, index) => (
+                          <Card className="mb-5" style={{ width: "100%" }}>
+                            <Card.Body>
+                              <Card.Title className="mb-4">
+                                Order #{index + 1}
+                              </Card.Title>
+                              <Card.Text>
+                                {order.orderedItems.map((product, index) => (
+                                  <div key={index} className={styles.row}>
+                                    <p style={{ width: "500px" }}>
+                                      {product.itemName}
+                                    </p>
+                                    <p>
+                                      {product.itemQuantity} x{" "}
+                                      {product.itemPrice}
+                                    </p>
+                                    <p>
+                                      {product.itemPrice * product.itemQuantity}{" "}
+                                      LKR
+                                    </p>
+                                  </div>
+                                ))}
+                                <hr />
+                              </Card.Text>
+                              <Badge
+                                variant={
+                                  order.status === "Processing"
+                                    ? "success"
+                                    : "primary"
+                                }
+                              >
+                                {order.status}
+                              </Badge>
+                            </Card.Body>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </>
           ) : (
             <div className={styles.orders}>
               {!orders ? (

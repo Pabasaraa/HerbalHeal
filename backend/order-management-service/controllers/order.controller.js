@@ -27,6 +27,17 @@ const createOrder = async (req, res) => {
       throw new Error("Error while getting the user ID: " + error);
     }
 
+    // Get the user's email address and add it to the request body
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/users/${req.body.customerId}`
+      );
+
+      req.body.customerEmail = response.data.email;
+    } catch (error) {
+      throw new Error("Error while getting the user's email address: " + error);
+    }
+
     const newOrder = await orderService.createOrder(req.body);
 
     if (newOrder) {
@@ -41,14 +52,14 @@ const createOrder = async (req, res) => {
 
       const mailOptions = {
         from: "HerbalHeal co. official.herbalheal@gmail.com",
-        to: "pabasara.was@gmail.com",
+        to: { name: req.body.customerName, address: req.body.customerEmail },
         subject: "Payment Confirmation",
         html: `
-          <p>Dear User,</p>
-          <p>Thank you for your payment of 5,250LKR. This email is to confirm that your payment has been received and processed.</p>
-          <p>Thank you for choosing our service.</p>
+          <p>Dear ${req.body.customerName},</p>
+          <p>Thank you for your payment. This email is to confirm that your payment has been received and processed.</p>
+          <p>Thank you for choosing HerbalHeal.</p>
           <p>Best regards,</p>
-          <p>Your Name</p>
+          <p>HerbalHeal co.</p>
         `,
       };
 
@@ -70,7 +81,7 @@ const createOrder = async (req, res) => {
   }
 };
 
-const getAllOrders = async (res) => {
+const getAllOrders = async (req, res) => {
   try {
     const orders = await orderService.getAllOrders();
 
@@ -125,7 +136,7 @@ const getOrdersByUserId = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   try {
-    const orderId = req.params.orderId;
+    const orderId = req.params.id;
     const updates = req.body;
     const updatedOrder = await orderService.updateOrder(orderId, updates);
     if (updatedOrder) {

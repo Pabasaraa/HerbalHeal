@@ -83,15 +83,6 @@ function NavBar() {
                 to={"#"}
                 style={{ fontSize: "1.05rem", fontWeight: "500" }}
               >
-                Review
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to={"#"}
-                style={{ fontSize: "1.05rem", fontWeight: "500" }}
-              >
                 Contact Us
               </Link>
             </li>
